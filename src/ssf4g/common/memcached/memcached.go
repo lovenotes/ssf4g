@@ -36,7 +36,7 @@ func (memcached *Memcached) Set(key string, value []byte, timeout int32) error {
 	defer conn.Close()
 
 	if value != nil {
-		memValue, err := datamgr.DataToSnappy(value)
+		memValue, err := compress.DataToSnappy(value)
 
 		if err != nil {
 			return err
@@ -65,7 +65,7 @@ func (memcached *Memcached) Get(key string) ([]byte, error) {
 	}
 
 	if memValue != nil {
-		value, err := datamgr.SnappyToData(memValue)
+		value, err := compress.SnappyToData(memValue)
 
 		if err != nil {
 			return nil, err
@@ -94,7 +94,7 @@ func (memcached *Memcached) GetMulti(keys []string) (map[string][]byte, error) {
 
 	for key, memValue := range memValues {
 		if memValue != nil {
-			value, err := datamgr.SnappyToData(memValue)
+			value, err := compress.SnappyToData(memValue)
 
 			if err != nil {
 				continue
