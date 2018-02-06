@@ -94,20 +94,16 @@ func decrypt(v []uint32, k []uint32) []uint32 {
 	return v
 }
 
-// Encrypt the data with key.
-// data is the bytes to be encrypted.
-// key is the encrypt key. It is the same as the decrypt key.
-func Encrypt(data []byte, key []byte) []byte {
+// Func - 使用XXTea加密数据
+func EncryptXxTea(data []byte, key []byte) []byte {
 	if data == nil || len(data) == 0 {
 		return data
 	}
 	return toBytes(encrypt(toUint32s(data, true), toUint32s(key, false)), false)
 }
 
-// Decrypt the data with key.
-// data is the bytes to be decrypted.
-// key is the decrypted key. It is the same as the encrypt key.
-func Decrypt(data []byte, key []byte) []byte {
+// Func - 使用XXTea解密数据
+func DecryptXxTea(data []byte, key []byte) []byte {
 	if data == nil || len(data) == 0 {
 		return data
 	}

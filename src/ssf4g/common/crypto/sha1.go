@@ -7,11 +7,13 @@ import (
 	"time"
 )
 
-func Sha1HashTime(data string) string {
-	return Sha1Hash(time.Now().String() + data)
+// Func - 使用Sha1Hash加密含时间信息的数据
+func EncryptSha1HashTime(data string) string {
+	return EncryptSha1Hash(time.Now().String() + data)
 }
 
-func Sha1Hash(data string) string {
+// Func - 使用Sha1Hash加密数据
+func EncryptSha1Hash(data string) string {
 	t := sha1.New()
 	io.WriteString(t, data)
 	return fmt.Sprintf("%x", t.Sum(nil))

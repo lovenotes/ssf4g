@@ -4,6 +4,7 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
+// Func - 版本比对VerA小于VerB
 func VersionLessThan(vera, verb string) (bool, error) {
 	versionA, err := version.NewVersion(vera)
 
@@ -24,6 +25,7 @@ func VersionLessThan(vera, verb string) (bool, error) {
 	return false, nil
 }
 
+// Func - 版本比对VerA大于VerB
 func VersionGreaterThan(vera, verb string) (bool, error) {
 	versionA, err := version.NewVersion(vera)
 

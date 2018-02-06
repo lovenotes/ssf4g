@@ -30,7 +30,7 @@ var (
 type IniMgr struct {
 }
 
-// Parse creates a new Config and parses the file configuration from the named file.
+// Func - 解析ini类型文件数据
 func (ini *IniMgr) Parse(name string) (*IniData, error) {
 	return ini.parseFile(name)
 }
@@ -197,8 +197,6 @@ func (ini *IniMgr) parseData(dir string, data []byte) (*IniData, error) {
 	return cfg, nil
 }
 
-// IniData A Config represents the ini configuration.
-// When set and get value, support key as section:name type.
 type IniData struct {
 	data       map[string]map[string]string // section=> key:val
 	secComment map[string]string            // section : comment
@@ -219,13 +217,12 @@ func (c *IniData) GetData3() map[string]string {
 	return c.keyComment
 }
 
-// Bool returns the boolean value for a given key.
+// Func - 根据key获取Bool类型数据
 func (c *IniData) Bool(key string) (bool, error) {
 	return parseBool(c.getdata(key))
 }
 
-// DefaultBool returns the boolean value for a given key.
-// if err != nil return defaltval
+// Func - 根据key获取Bool类型数据,不存在时使用默认值
 func (c *IniData) DefaultBool(key string, defaultval bool) bool {
 	v, err := c.Bool(key)
 	if err != nil {
@@ -234,13 +231,12 @@ func (c *IniData) DefaultBool(key string, defaultval bool) bool {
 	return v
 }
 
-// Int returns the integer value for a given key.
+// Func - 根据key获取Int类型数据
 func (c *IniData) Int(key string) (int, error) {
 	return strconv.Atoi(c.getdata(key))
 }
 
-// DefaultInt returns the integer value for a given key.
-// if err != nil return defaltval
+// Func - 根据key获取Int类型数据,不存在时使用默认值
 func (c *IniData) DefaultInt(key string, defaultval int) int {
 	v, err := c.Int(key)
 	if err != nil {
@@ -249,13 +245,12 @@ func (c *IniData) DefaultInt(key string, defaultval int) int {
 	return v
 }
 
-// Int64 returns the int64 value for a given key.
+// Func - 根据key获取Int64类型数据
 func (c *IniData) Int64(key string) (int64, error) {
 	return strconv.ParseInt(c.getdata(key), 10, 64)
 }
 
-// DefaultInt64 returns the int64 value for a given key.
-// if err != nil return defaltval
+// Func - 根据key获取Int64类型数据,不存在时使用默认值
 func (c *IniData) DefaultInt64(key string, defaultval int64) int64 {
 	v, err := c.Int64(key)
 	if err != nil {
@@ -264,13 +259,12 @@ func (c *IniData) DefaultInt64(key string, defaultval int64) int64 {
 	return v
 }
 
-// Float returns the float value for a given key.
+// Func - 根据key获取Float类型数据
 func (c *IniData) Float(key string) (float64, error) {
 	return strconv.ParseFloat(c.getdata(key), 64)
 }
 
-// DefaultFloat returns the float64 value for a given key.
-// if err != nil return defaltval
+// Func - 根据key获取Float64类型数据,不存在时使用默认值
 func (c *IniData) DefaultFloat(key string, defaultval float64) float64 {
 	v, err := c.Float(key)
 	if err != nil {
@@ -279,13 +273,12 @@ func (c *IniData) DefaultFloat(key string, defaultval float64) float64 {
 	return v
 }
 
-// String returns the string value for a given key.
+// Func - 根据key获取String类型数据
 func (c *IniData) String(key string) string {
 	return c.getdata(key)
 }
 
-// DefaultString returns the string value for a given key.
-// if err != nil return defaltval
+// Func - 根据key获取String类型数据,不存在时使用默认值
 func (c *IniData) DefaultString(key string, defaultval string) string {
 	v := c.String(key)
 	if v == "" {
@@ -294,8 +287,7 @@ func (c *IniData) DefaultString(key string, defaultval string) string {
 	return v
 }
 
-// Strings returns the []string value for a given key.
-// Return nil if config value does not exist or is empty.
+// Func - 根据key获取;分割的String数组数据
 func (c *IniData) Strings(key string) []string {
 	v := c.String(key)
 	if v == "" {
@@ -304,8 +296,7 @@ func (c *IniData) Strings(key string) []string {
 	return strings.Split(v, ";")
 }
 
-// DefaultStrings returns the []string value for a given key.
-// if err != nil return defaltval
+// Func - 根据key获取;分割的String数组数据,不存在时使用默认值
 func (c *IniData) DefaultStrings(key string, defaultval []string) []string {
 	v := c.Strings(key)
 	if v == nil {
@@ -314,7 +305,7 @@ func (c *IniData) DefaultStrings(key string, defaultval []string) []string {
 	return v
 }
 
-// GetSection returns map for the given section
+// Func - 根据指定Section的数据
 func (c *IniData) GetSection(section string) (map[string]string, error) {
 	if v, ok := c.data[section]; ok {
 		return v, nil
@@ -322,7 +313,6 @@ func (c *IniData) GetSection(section string) (map[string]string, error) {
 	return nil, errors.New("not exist section")
 }
 
-// section.key or key
 func (c *IniData) getdata(key string) string {
 	if len(key) == 0 {
 		return ""

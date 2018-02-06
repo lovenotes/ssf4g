@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"ssf4g/libs/config"
+	"ssf4g/common/config"
 
 	"github.com/getsentry/raven-go"
 )
@@ -83,6 +83,7 @@ func Error(format string, v ...interface{}) string {
 	return log
 }
 
+// Func - 异步发送Log消息
 func AsyncSend(errdata *ErrData) {
 	if _sentry_switch == true {
 		captureError(errdata, raven.ERROR)

@@ -35,7 +35,6 @@ func init() {
 	go _timer()
 }
 
-//------------------------------------------------
 // 定时器 goroutine
 // 根据程序启动后经过的秒数计数
 func _timer() {
@@ -95,7 +94,7 @@ func _timer() {
 	}
 }
 
-//------------------------------------------------ 单级触发
+// 单级触发
 func _trigger(level uint) {
 	now := time.Now().Unix()
 	list := _eventlist[level]
@@ -120,8 +119,7 @@ func _trigger(level uint) {
 	}
 }
 
-//------------------------------------------------
-// 添加一个定时，timeout为到期的Unix时间
+// Func - 添加一个定时，timeout为到期的Unix时间
 // id 是调用者定义的编号, 事件发生时，会把id发送到ch
 func Add(id int32, timeout int64, ch chan int32) {
 	event := &_timer_event{Id: id, CH: ch, Timeout: timeout}

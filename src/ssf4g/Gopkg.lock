@@ -50,6 +50,12 @@
   revision = "4fe82ae3040f80a03d04d2cccb5606a626b8e1ee"
 
 [[projects]]
+  name = "github.com/json-iterator/go"
+  packages = ["."]
+  revision = "28452fcdec4e44348d2af0d91d1e9e38da3a9e0a"
+  version = "1.0.5"
+
+[[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
@@ -58,6 +64,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7502752bd99fc309c3ba409b57542e0d1065ff3094ff40390b6b3a50db20dd67"
+  inputs-digest = "0528b4f67bd341ef410988ad885625a94af793a95f51039bea216be68bc984f7"
   solver-name = "gps-cdcl"
   solver-version = 1

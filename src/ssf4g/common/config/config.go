@@ -46,6 +46,7 @@ func init() {
 	}
 }
 
+// Func - 获取Ini数据
 func GetIniData() *IniData {
 	return _ini_data
 }

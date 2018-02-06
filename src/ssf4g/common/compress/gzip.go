@@ -7,9 +7,7 @@ import (
 	"io/ioutil"
 )
 
-// Doc https://studygolang.com/articles/10501?fr=sidebar
-
-// Func - 压缩数据为GZIP格式
+// Func - 压缩数据为Gzip格式
 func DataToGzip(data []byte) ([]byte, error) {
 	retData := make([]byte, 0)
 
@@ -50,7 +48,7 @@ func DataToGzip(data []byte) ([]byte, error) {
 	return retData, nil
 }
 
-// Func - 解压GZIP格式数据
+// Func - 解压Gzip格式数据
 func GzipToData(data []byte) ([]byte, error) {
 	if data[0] == '0' {
 		return data[1:], nil

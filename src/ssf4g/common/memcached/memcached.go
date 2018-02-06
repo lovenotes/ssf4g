@@ -10,6 +10,7 @@ type Memcached struct {
 	_pool *memcache.Pool
 }
 
+// Func - Memcached构造函数
 func NewMemcached(server string, maxidle int) (*Memcached, error) {
 	memcached := &Memcached{}
 
@@ -31,6 +32,7 @@ func NewMemcached(server string, maxidle int) (*Memcached, error) {
 	return memcached, nil
 }
 
+// Func - Memcached插入数据
 func (memcached *Memcached) Set(key string, value []byte, timeout int32) error {
 	conn := memcached._pool.Get()
 	defer conn.Close()
@@ -50,6 +52,7 @@ func (memcached *Memcached) Set(key string, value []byte, timeout int32) error {
 	return nil
 }
 
+// Func - Memcached获取单条数据
 func (memcached *Memcached) Get(key string) ([]byte, error) {
 	conn := memcached._pool.Get()
 	defer conn.Close()
@@ -77,6 +80,7 @@ func (memcached *Memcached) Get(key string) ([]byte, error) {
 	return nil, nil
 }
 
+// Func - Memcached获取多条数据
 func (memcached *Memcached) GetMulti(keys []string) (map[string][]byte, error) {
 	conn := memcached._pool.Get()
 	defer conn.Close()
@@ -107,6 +111,7 @@ func (memcached *Memcached) GetMulti(keys []string) (map[string][]byte, error) {
 	return values, nil
 }
 
+// Func - Memcached删除数据
 func (memcached *Memcached) Delete(key string) error {
 	conn := memcached._pool.Get()
 	defer conn.Close()
