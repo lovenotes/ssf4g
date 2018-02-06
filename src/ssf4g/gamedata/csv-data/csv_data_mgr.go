@@ -1,4 +1,4 @@
-package gamedata
+package csvdata
 
 import (
 	"os"
@@ -10,7 +10,8 @@ import (
 )
 
 var (
-	_lock   sync.RWMutex
+	_lock sync.RWMutex
+
 	_tables map[string]*Table
 )
 

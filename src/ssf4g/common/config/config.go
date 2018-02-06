@@ -9,7 +9,13 @@ var (
 	_ini_data *IniData
 )
 
-func init() {
+// Func - 初始化配置数据
+func InitConfig() {
+	ReloadConfig()
+}
+
+// Func - 重载配置数据
+func ReloadConfig() {
 	appPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
 
 	if err != nil {
@@ -46,7 +52,7 @@ func init() {
 	}
 }
 
-// Func - 获取Ini数据
+// Func - 获取Ini配置数据
 func GetIniData() *IniData {
 	return _ini_data
 }

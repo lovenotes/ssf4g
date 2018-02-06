@@ -10,11 +10,29 @@ PortalSrv
 GameSrv
 
 A. ResourceSrv基本流程
-1. ResourceSrv的resource_info_data.csv提供所有ResourceSrv信息
-客户端通过channel_id和version_id获取正确的ResourceSrv入口信息
+1. ResourceSrv切换API
+    Method: POST
+    Url: resource/v1/switch
+    Params: channel_id version_id   
 
-2. channel_info_data.csv,version_info_data.csv提供LoginSrv信息
-客户端通过channel_id获取LoginSrv信息,CDN资源服务器地址,以及当前服务器支持的兼容版本
+    描述: 客户端获取指定ResourceSrv入口信息
+    配置表: resource_info_data.csv
 
-3. portal_info_data.csv提供PortalSrv信息
+2. ResourceSrv详情API
+	Method: POST
+	Url: resource/v1/detail
+	Params: channel_id platform_type
+	
+	描述: 获取LoginSrv信息,CDN资源服务器地址,当前服务器支持的兼容版本,以及当前平台下热更资源信息
+	配置表: channel_info_data.csv version_info_data.csv
+
+3. PortalSrv列表API
+	Method: POST
+	Url: resource/v1/portals
+	Params: 空
+	
+	描述: 获取PortalSrv列表
+	配置表: portal_info_data.csv
+	注: 此处可以配置指向统一组GameSrv的多个PortalSrv或者指向PortalSrv负载均衡Addr,实现单服设计
+	    也可以配置指向不同组GameSrv的多个PortalSrv,实现多服/滚服设计
 

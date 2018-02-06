@@ -1,4 +1,4 @@
-package gamedata
+package csvdata
 
 import (
 	"encoding/csv"
