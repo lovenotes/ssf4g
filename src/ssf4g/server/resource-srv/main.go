@@ -8,6 +8,7 @@ import (
 	"ssf4g/server/resource-srv/common/resource-data"
 	"ssf4g/server/resource-srv/common/srv-config"
 	"ssf4g/server/resource-srv/service/http-service"
+	"ssf4g/server/resource-srv/service/rpc-service"
 )
 
 func main() {
@@ -34,6 +35,9 @@ func main() {
 
 	// 启动GM Service
 	go httpservice.StartGmService()
+
+	// 启动RPC Service
+	go rpcservice.StartRpcService()
 
 	// 启动Http Service
 	httpservice.StartHttpService()
