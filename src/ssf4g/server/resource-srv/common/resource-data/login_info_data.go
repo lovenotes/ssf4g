@@ -60,7 +60,7 @@ func reloadLoginInfo() {
 		loginInfo := &LoginInfoData{}
 
 		// Login ID
-		login_id, err := strconv.ParseUint(key, 10, 32)
+		loginID, err := strconv.ParseUint(key, 10, 32)
 
 		if err != nil {
 			tlog.Error("reload login info (%s, %s) err (key parse %v).", LOGIN_INFO_DATA, key, err)
@@ -68,40 +68,40 @@ func reloadLoginInfo() {
 			continue
 		}
 
-		loginInfo.LoginID = uint32(login_id)
+		loginInfo.LoginID = uint32(loginID)
 
 		// Login Type
-		login_type, err := strconv.ParseUint(value.Fields[LOGIN_INFO_TYPE], 10, 32)
+		loginType, err := strconv.ParseUint(value.Fields[LOGIN_INFO_TYPE], 10, 32)
 
 		if err != nil {
-			tlog.Error("reload login info (%s, %s, %s) parseint err (login type parse %v).", LOGIN_INFO_DATA, key, value.Fields[LOGIN_INFO_TYPE], err)
+			tlog.Error("reload login info (%s, %s, %s) err (login type parse %v).", LOGIN_INFO_DATA, key, value.Fields[LOGIN_INFO_TYPE], err)
 
 			continue
 		}
 
-		loginInfo.LoginType = uint32(login_type)
+		loginInfo.LoginType = uint32(loginType)
 
 		// Login Addr
-		login_addr := value.Fields[LOGIN_INFO_ADDR]
+		loginAddr := value.Fields[LOGIN_INFO_ADDR]
 
-		if login_addr == "" {
+		if loginAddr == "" {
 			tlog.Error("reload login info (%s, %s) err (login addr nil).", LOGIN_INFO_DATA, key)
 
 			continue
 		}
 
-		loginInfo.LoginAddr = login_addr
+		loginInfo.LoginAddr = loginAddr
 
 		// CDN Addr
-		cdn_addr := value.Fields[LOGIN_INFO_CDN_ADDR]
+		cdnAddr := value.Fields[LOGIN_INFO_CDN_ADDR]
 
-		if cdn_addr == "" {
+		if cdnAddr == "" {
 			tlog.Error("reload login info (%s, %s) err (cdn addr nil).", LOGIN_INFO_DATA, key)
 
 			continue
 		}
 
-		loginInfo.CDNAddr = cdn_addr
+		loginInfo.CDNAddr = cdnAddr
 
 		// Comp Ver Low
 		compVerLow := value.Fields[LOGIN_INFO_COMP_VER_LOW]
@@ -129,17 +129,21 @@ func reloadLoginInfo() {
 	}
 }
 
-func GetLoginInfo() *LoginInfoData {
+func GetLoginInfo() (*LoginInfoData, bool) {
 	_lock.RLock()
 	defer _lock.RUnlock()
 
 	loginInfoCnt := len(_login_info_datas._login_info_detail)
 
+	if loginInfoCnt == 0 {
+		return nil, false
+	}
+
 	if loginInfoCnt == 1 {
-		return _login_info_datas._login_info_detail[0]
+		return _login_info_datas._login_info_detail[0], true
 	}
 
 	loginIndex := utility.RandNum(loginInfoCnt)
 
-	return _login_info_datas._login_info_detail[loginIndex]
+	return _login_info_datas._login_info_detail[loginIndex], true
 }

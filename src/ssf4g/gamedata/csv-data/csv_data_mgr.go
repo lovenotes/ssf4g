@@ -77,25 +77,25 @@ func getData(tblname string, rowname string, fieldname string) (string, int) {
 	_lock.RLock()
 	defer _lock.RUnlock()
 
-	tbl, ok := _tables[tblname]
+	table, ret := _tables[tblname]
 
-	if !ok {
+	if ret == false {
 		tlog.Error("get (%s) err (table not exists).", tblname)
 
 		return "", CSV_DATA_NOT_EXISTS
 	}
 
-	rec, ok := tbl.Records[rowname]
+	record, ret := table.Records[rowname]
 
-	if !ok {
+	if ret == false {
 		tlog.Error("get (%s, %s) err (row not exists).", tblname, rowname)
 
 		return "", CSV_DATA_NOT_EXISTS
 	}
 
-	value, ok := rec.Fields[fieldname]
+	value, ret := record.Fields[fieldname]
 
-	if !ok {
+	if ret == false {
 		tlog.Error("get (%s, %s) err (field not exists).", tblname, fieldname)
 
 		return "", CSV_DATA_NOT_EXISTS
@@ -108,9 +108,9 @@ func GetTable(tblname string) (map[string]*Record, int) {
 	_lock.RLock()
 	defer _lock.RUnlock()
 
-	tbl, ok := _tables[tblname]
+	tbl, ret := _tables[tblname]
 
-	if !ok {
+	if ret == false {
 		tlog.Error("get table (%s) err (table not exists).", tblname)
 
 		return nil, CSV_DATA_NOT_EXISTS
@@ -159,43 +159,43 @@ func GetString(tblname string, rowname string, fieldname string) (string, int) {
 }
 
 func Count(tblname string) int32 {
-	tbl := _tables[tblname]
+	table := _tables[tblname]
 
-	if tbl == nil {
+	if table == nil {
 		return 0
 	}
 
-	return int32(len(tbl.Records))
+	return int32(len(table.Records))
 }
 
 func IsFieldExists(tblname string, fieldname string) bool {
 	_lock.RLock()
 	defer _lock.RUnlock()
 
-	tbl := _tables[tblname]
+	table := _tables[tblname]
 
-	if tbl == nil {
+	if table == nil {
 		return false
 	}
 
 	key := ""
 
 	// get one record key
-	for k := range tbl.Records {
+	for k := range table.Records {
 		key = k
 
 		break
 	}
 
-	rec, ok := tbl.Records[key]
+	rec, ret := table.Records[key]
 
-	if !ok {
+	if ret == false {
 		return false
 	}
 
-	_, ok = rec.Fields[fieldname]
+	_, ret = rec.Fields[fieldname]
 
-	if !ok {
+	if ret == false {
 		return false
 	}
 

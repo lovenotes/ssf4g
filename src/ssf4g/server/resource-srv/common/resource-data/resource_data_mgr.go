@@ -19,10 +19,10 @@ func InitResourceData() {
 	resoureDataPath := svrconfig.GetConfig().ResourceDataPath
 	csvdata.InitCsvData(resoureDataPath)
 
+	initResourceInfo()
 	initLoginInfo()
-	initPortalSvrInfo()
-	initResourceSvrInfo()
-	initVersionInfo()
+	initPortalInfo()
+	initPlatformInfo()
 	initZoneInfo()
 }
 
@@ -34,11 +34,9 @@ func ReloadResourceData() {
 	resoureDataPath := svrconfig.GetConfig().ResourceDataPath
 	csvdata.ReloadCsvData(resoureDataPath)
 
-	reloadErrorCode()
-
+	reloadResourceInfo()
 	reloadLoginInfo()
-	reloadPortalSvrInfo()
-	reloadResourceSvrInfo()
-	reloadVersionInfo()
+	reloadPortalInfo()
+	reloadPlatformInfo()
 	reloadZoneInfo()
 }

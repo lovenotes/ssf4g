@@ -18,12 +18,12 @@ const (
 )
 
 type ZoneInfoData struct {
-	ZoneID     int32
+	ZoneID     uint32
 	ZoneStatus int32
 }
 
 type ZoneInfoDatas struct {
-	_zone_info_detail map[int32]*ZoneInfoData
+	_zone_info_detail map[uint32]*ZoneInfoData
 }
 
 var (
@@ -37,40 +37,46 @@ func initZoneInfo() {
 }
 
 func reloadZoneInfo() {
-	_zone_info_datas._zone_info_detail = make(map[int32]*ZoneInfoData)
+	_zone_info_datas._zone_info_detail = make(map[uint32]*ZoneInfoData)
 
-	tableInfo, ret := gamedata.GetTable(ZONE_INFO_DATA)
-	if ret != gamedata.GAME_DATA_OK {
-		logger.GetNLog().Error("get table (%s) err.", ZONE_INFO_DATA)
+	tableInfo, ret := csvdata.GetTable(ZONE_INFO_DATA)
+
+	if ret != csvdata.CSV_DATA_OK {
+		tlog.Error("reload zone info (%s) err (table not exist).", ZONE_INFO_DATA)
+
 		return
 	}
 
 	for key, value := range tableInfo {
 		zoneInfo := &ZoneInfoData{}
 
-		zone_id, err := strconv.ParseInt(key, 10, 32)
-		if err != nil {
-			logger.GetNLog().Error("get key (%s, %s) err (%v).", ZONE_INFO_DATA, key, err)
+		//Zone ID
+		zoneID, err := strconv.ParseUint(key, 10, 32)
 
-			continue
-		}
-		zoneInfo.ZoneID = int32(zone_id)
-
-		// Zone状态
-		zone_status, err := strconv.ParseInt(value.Fields[ZONE_INFO_STATUS], 10, 32)
 		if err != nil {
-			logger.GetNLog().Error("get zone_status (%s, %s, %s) parseint err (%v).", ZONE_INFO_DATA, key, value.Fields[ZONE_INFO_STATUS], err)
+			tlog.Error("reload zone info (%s, %s) err (key parse %v).", ZONE_INFO_DATA, key, err)
 
 			continue
 		}
 
-		zoneInfo.ZoneStatus = int32(zone_status)
+		zoneInfo.ZoneID = uint32(zoneID)
+
+		// Zone Status
+		zoneStatus, err := strconv.ParseInt(value.Fields[ZONE_INFO_STATUS], 10, 32)
+
+		if err != nil {
+			tlog.Error("reload zone info (%s, %s, %s) err (zone status parse %v).", ZONE_INFO_DATA, key, value.Fields[ZONE_INFO_STATUS], err)
+
+			continue
+		}
+
+		zoneInfo.ZoneStatus = int32(zoneStatus)
 
 		_zone_info_datas._zone_info_detail[zoneInfo.ZoneID] = zoneInfo
 	}
 }
 
-func GetZoneInfo(zoneid int32) (*ZoneInfoData, bool) {
+func GetZoneInfo(zoneid uint32) (*ZoneInfoData, bool) {
 	_lock.RLock()
 	defer _lock.RUnlock()
 

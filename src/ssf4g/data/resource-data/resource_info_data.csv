@@ -1,3 +1,3 @@
-resource_id,channel_id,channel_ver,resource_addr,comment
+index,channel_id,channel_ver,resource_addr,comment
 1,97,"iosV1.0","192.168.0.138:8280","97渠道IOS入口"
 2,97,"andV1.0","115.29.247.37:9580","97渠道安卓入口"
