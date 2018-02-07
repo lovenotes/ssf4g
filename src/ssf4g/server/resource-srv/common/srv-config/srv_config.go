@@ -1,4 +1,4 @@
-package svrconfig
+package srvconfig
 
 import (
 	"sync"
@@ -41,8 +41,6 @@ var (
 )
 
 func InitSrvConfig() {
-	config.InitConfig()
-
 	_conf_info = &SrvConfig{}
 
 	ReloadSrvConfig()
@@ -55,8 +53,6 @@ func GetConfig() *SrvConfig {
 func ReloadSrvConfig() {
 	_lock.Lock()
 	defer _lock.Unlock()
-
-	config.ReloadConfig()
 
 	iniData := config.GetIniData()
 

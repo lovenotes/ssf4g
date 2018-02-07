@@ -10,7 +10,7 @@ var (
 )
 
 // Func - 初始化配置数据
-func InitConfig() {
+func init() {
 	ReloadConfig()
 }
 

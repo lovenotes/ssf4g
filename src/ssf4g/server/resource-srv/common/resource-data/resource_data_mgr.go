@@ -16,7 +16,7 @@ func InitResourceData() {
 	defer _lock.Unlock()
 
 	// 初始化CSV数据
-	resoureDataPath := svrconfig.GetConfig().ResourceDataPath
+	resoureDataPath := srvconfig.GetConfig().ResourceDataPath
 	csvdata.InitCsvData(resoureDataPath)
 
 	initResourceInfo()
@@ -31,7 +31,7 @@ func ReloadResourceData() {
 	defer _lock.Unlock()
 
 	// 重新加载CSV数据
-	resoureDataPath := svrconfig.GetConfig().ResourceDataPath
+	resoureDataPath := srvconfig.GetConfig().ResourceDataPath
 	csvdata.ReloadCsvData(resoureDataPath)
 
 	reloadResourceInfo()

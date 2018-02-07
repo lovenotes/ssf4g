@@ -5,9 +5,11 @@ import (
 	"os/signal"
 	"syscall"
 
+	"ssf4g/common/config"
 	"ssf4g/common/tlog"
 	"ssf4g/common/utility"
-	//"ssf4g/server/resource-srv/"
+	"ssf4g/server/resource-srv/common/resource-data"
+	"ssf4g/server/resource-srv/common/srv-config"
 )
 
 // Func - 信号量处理
@@ -39,11 +41,12 @@ func SignalProc() {
 		case syscall.SIGHUP:
 			tlog.Info("[SIGHUP]")
 
-			// 重新加载Config文件, 重新加载ResourceData
-			/*
-				svrconfig.Reload()
-				gamedatamgr.ReloadGameData()
-			*/
+			// 重新加载Config文件
+			config.ReloadConfig()
+			srvconfig.ReloadSrvConfig()
+
+			// 重新加载ResourceData
+			resourcedata.ReloadResourceData()
 
 			break
 		case syscall.SIGINT:
