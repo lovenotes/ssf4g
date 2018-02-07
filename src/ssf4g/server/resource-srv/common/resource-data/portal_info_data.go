@@ -5,8 +5,6 @@ import (
 
 	"ssf4g/common/tlog"
 	"ssf4g/gamedata/csv-data"
-
-	"github.com/json-iterator/go"
 )
 
 // 配置表名
@@ -107,17 +105,13 @@ func GetPortalInfo(portalid uint32) (*PortalInfoData, bool) {
 	return portalInfo, true
 }
 
-func GetPortalInfos(channelid, logintype int32) (string, bool) {
+func GetPortalInfos() ([]*PortalInfoData, bool) {
 	_lock.RLock()
 	defer _lock.RUnlock()
 
-	portalInfos, err := jsoniter.Marshal(_portal_info_datas._portal_info_list)
-
-	if err != nil {
-		tlog.Error("get portal infos err (marshal %v).", err)
-
-		return "", false
+	if len(_portal_info_datas._portal_info_list) == 0 {
+		return nil, false
 	}
 
-	return string(portalInfos), true
+	return _portal_info_datas._portal_info_list, true
 }

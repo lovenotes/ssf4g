@@ -61,7 +61,7 @@ func (respfailedretdata *RespFailedRetData) ToJson() []byte {
 	return respData
 }
 
-func BuildRespBriefFailedRetData(w http.ResponseWriter, errmsg, desc string) {
+func BuildRespFailedRetData(w http.ResponseWriter, errmsg, desc string) {
 	respData := &RespFailedRetData{
 		RespRet: false,
 		RespData: &RespFailedData{

@@ -105,7 +105,7 @@ func reloadResourceInfo() {
 	}
 }
 
-func GetResourceSvrInfo(channelid uint32, channelver string) (*ResourceInfoData, bool) {
+func GetResourceInfo(channelid uint32, channelver string) (*ResourceInfoData, bool) {
 	_lock.RLock()
 	defer _lock.RUnlock()
 
