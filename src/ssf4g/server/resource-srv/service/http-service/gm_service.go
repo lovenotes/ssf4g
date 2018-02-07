@@ -33,5 +33,7 @@ func StartGmService() {
 		errMsg := tlog.Error("start gm service (%s) err (%v).", srvconfig.GetConfig().SrvName, serviceGM, err)
 
 		tlog.AsyncSend(tlog.NewErrData(err, errMsg))
+
+		return
 	}
 }

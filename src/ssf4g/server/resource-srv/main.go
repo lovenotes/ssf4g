@@ -1,18 +1,13 @@
 package main
 
 import (
-	"net/http"
 	"runtime"
-	"time"
 
 	"ssf4g/common/tlog"
 	"ssf4g/common/utility"
 	"ssf4g/server/resource-srv/common/resource-data"
 	"ssf4g/server/resource-srv/common/srv-config"
-	"ssf4g/server/resource-srv/router/client-router"
 	"ssf4g/server/resource-srv/service/http-service"
-
-	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -40,28 +35,8 @@ func main() {
 	// 启动GM Service
 	go httpservice.StartGmService()
 
-	// 初始化Router
-	muxRouter := mux.NewRouter()
-
-	clientrouter.InitClientRouter(muxRouter)
-
-	// 监听Client的连接
-	service := srvconfig.GetConfig().Service
-
-	srv := &http.Server{
-		Handler:      muxRouter,
-		Addr:         service,
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
-
-	err := srv.ListenAndServe()
-
-	if err != nil {
-		errMsg := tlog.Error("start client service (%s, %s) err (%v).", srvconfig.GetConfig().SrvName, service, err)
-
-		tlog.AsyncSend(tlog.NewErrData(err, errMsg))
-	}
+	// 启动Http Service
+	httpservice.StartHttpService()
 }
 
 // 启动其他相关Routine

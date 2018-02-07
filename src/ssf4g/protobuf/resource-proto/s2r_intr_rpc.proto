@@ -12,6 +12,6 @@ message S2RZoneStatusGetRespProto {
 	int32 zoneStatus = 2;
 }
 
-service ResourceIntrService {
+service ResourceS2RIntrService {
   	rpc S2RZoneStatusGet(S2RZoneStatusGetReqProto) returns (S2RZoneStatusGetRespProto);
 }
