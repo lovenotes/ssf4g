@@ -1,4 +1,4 @@
-package clienthandler
+package clientcontroller
 
 import (
 	"net/http"

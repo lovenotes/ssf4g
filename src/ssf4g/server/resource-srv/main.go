@@ -5,12 +5,12 @@ import (
 	"runtime"
 	"time"
 
-	"ssf4g/common/config"
 	"ssf4g/common/tlog"
 	"ssf4g/common/utility"
 	"ssf4g/server/resource-srv/common/resource-data"
 	"ssf4g/server/resource-srv/common/srv-config"
 	"ssf4g/server/resource-srv/router/client-router"
+	"ssf4g/server/resource-srv/service/http-service"
 
 	"github.com/gorilla/mux"
 )
@@ -37,13 +37,16 @@ func main() {
 	// 初始化游戏逻辑相关的各个模块
 	initModel()
 
+	// 启动GM Service
+	go httpservice.StartGmService()
+
 	// 初始化Router
 	muxRouter := mux.NewRouter()
 
 	clientrouter.InitClientRouter(muxRouter)
 
 	// 监听Client的连接
-	service := config.GetIniData().String("service")
+	service := srvconfig.GetConfig().Service
 
 	srv := &http.Server{
 		Handler:      muxRouter,
@@ -55,7 +58,7 @@ func main() {
 	err := srv.ListenAndServe()
 
 	if err != nil {
-		errMsg := tlog.Error("start client service (%s) err (%v).", config.GetIniData().String("srv_name"), service, err)
+		errMsg := tlog.Error("start client service (%s, %s) err (%v).", srvconfig.GetConfig().SrvName, service, err)
 
 		tlog.AsyncSend(tlog.NewErrData(err, errMsg))
 	}
@@ -72,6 +75,6 @@ func startup() {
 
 // 初始化各个模块
 func initModel() {
-	// 初始化全局邮件信息及DBMgr
+	// 初始化ResourceData
 	resourcedata.InitResourceData()
 }

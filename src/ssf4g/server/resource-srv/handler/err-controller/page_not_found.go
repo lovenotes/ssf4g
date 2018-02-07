@@ -1,4 +1,4 @@
-package errhandler
+package errcontroller
 
 import (
 	"net/http"

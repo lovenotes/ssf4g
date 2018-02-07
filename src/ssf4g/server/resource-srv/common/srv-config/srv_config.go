@@ -8,6 +8,8 @@ import (
 )
 
 const (
+	SRV_NAME = "resource_srv"
+
 	RUN_MODE = "dev"
 
 	SERVICE     = "0.0.0.0:8001"
@@ -22,6 +24,7 @@ const (
 )
 
 type SrvConfig struct {
+	SrvName string
 	RunMode string
 
 	Service    string
@@ -55,6 +58,12 @@ func ReloadSrvConfig() {
 	defer _lock.Unlock()
 
 	iniData := config.GetIniData()
+
+	if _conf_info.SrvName = iniData.String("srv_name"); _conf_info.SrvName == "" {
+		_conf_info.SrvName = SRV_NAME
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "srv_name", _conf_info.SrvName)
+	}
 
 	if _conf_info.RunMode = iniData.String("run_mode"); _conf_info.RunMode == "" {
 		_conf_info.RunMode = RUN_MODE
