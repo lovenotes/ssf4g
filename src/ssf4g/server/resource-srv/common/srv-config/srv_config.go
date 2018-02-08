@@ -16,7 +16,7 @@ const (
 	SERVICE_GM  = "0.0.0.0:8011"
 	SERVICE_RPC = "0.0.0.0:8021"
 
-	LOG_PATH = "/data/ssf4g/logs/resourcesvr.log"
+	LOG_PATH = "/data/ssf4g/logs/resourcesrv.log"
 
 	RESOURCE_DATA_PATH = "/data/ssf4g/data/resourcedata"
 
