@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func StartHttpService() {
+func StartClientHttpService() {
 	// 初始化Router
 	muxRouter := mux.NewRouter()
 

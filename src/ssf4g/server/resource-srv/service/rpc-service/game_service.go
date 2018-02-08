@@ -4,12 +4,14 @@ import (
 	"net"
 
 	"ssf4g/common/tlog"
+	"ssf4g/protobuf/resource-proto"
 	"ssf4g/server/resource-srv/common/srv-config"
+	"ssf4g/server/resource-srv/handler/game-handler"
 
 	"google.golang.org/grpc"
 )
 
-func StartRpcService() {
+func StartGameRpcService() {
 	serviceRPC := srvconfig.GetConfig().ServiceRPC
 
 	lis, err := net.Listen("tcp", serviceRPC)
@@ -25,7 +27,7 @@ func StartRpcService() {
 	server := grpc.NewServer()
 
 	// 注册RPC-Service
-	//appproto.RegisterAppIntrServiceServer(srv, &rpcservice.AppIntrService{})
+	resourceproto.RegisterGameIntrServiceServer(server, &gamehandler.GameIntrService{})
 
 	err = server.Serve(lis)
 

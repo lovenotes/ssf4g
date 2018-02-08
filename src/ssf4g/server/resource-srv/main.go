@@ -34,13 +34,13 @@ func main() {
 	initModel()
 
 	// 启动GM Service
-	go httpservice.StartGmService()
+	go httpservice.StartGmHttpService()
 
 	// 启动RPC Service
-	go rpcservice.StartRpcService()
+	go rpcservice.StartGameRpcService()
 
-	// 启动Http Service
-	httpservice.StartHttpService()
+	// 启动Client Service
+	httpservice.StartClientHttpService()
 }
 
 // 启动其他相关Routine
