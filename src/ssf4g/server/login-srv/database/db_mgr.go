@@ -2,89 +2,26 @@ package dbmgr
 
 import (
 	"ssf4g/common/tlog"
+	"ssf4g/server/login-srv/common/srv-config"
 	"ssf4g/server/login-srv/database/login-dao"
-	"taptap-kit/lib/conf"
 )
 
 var (
-	_market_dao *marketdao.MarketDao
-
-	_stats_dao *statsdao.StatsDao
-
-	_forum_dao *forumdao.ForumDao
+	_login_dao *logindao.LoginDao
 )
 
 func init() {
-	marketUrl := ""
-	statsUrl := ""
-	forumUrl := ""
+	maxIdleConn := srvconfig.GetConfig().DBMaxIdleConn
+	maxOpenConn := srvconfig.GetConfig().DBMaxOpenConn
 
-	maxIdleConn, err := conf.GetIniData().Int("db_max_idle_conn")
+	loginUrl := srvconfig.GetConfig().LoginDB
 
-	if err != nil {
-		errMsg := tlog.Error("init database (max idle conn) err (%v).", err)
+	_login_dao = &logindao.LoginDao{}
 
-		tlog.AsyncSend(tlog.NewErrorData(err, errMsg))
-
-		return
-	}
-
-	maxOpenConn, err := conf.GetIniData().Int("db_max_open_conn")
-
-	if err != nil {
-		errMsg := tlog.Error("init database (max open conn) err (%v).", err)
-
-		tlog.AsyncSend(tlog.NewErrorData(err, errMsg))
-
-		return
-	}
-
-	runMode := conf.GetIniData().String("run_mode")
-
-	if runMode == "prod" {
-		marketUrl = conf.GetIniData().String("prod::market_db")
-
-		statsUrl = conf.GetIniData().String("prod::stats_db")
-
-		forumUrl = conf.GetIniData().String("prod::forum_db")
-	} else {
-		marketUrl = conf.GetIniData().String("dev::market_db")
-
-		statsUrl = conf.GetIniData().String("dev::stats_db")
-
-		forumUrl = conf.GetIniData().String("dev::forum_db")
-	}
-
-	_market_dao = &marketdao.MarketDao{}
-
-	errData := _market_dao.InitMarketDao(marketUrl, maxIdleConn, maxOpenConn)
+	errData := _login_dao.InitLoginDao(loginUrl, maxIdleConn, maxOpenConn)
 
 	if errData != nil {
-		errMsg := tlog.Error("init market dao (%s, %d, %d) err (%v).", marketUrl, maxIdleConn, maxOpenConn, errData.Error())
-
-		tlog.AsyncSend(errData.AttachErrMsg(errMsg))
-
-		return
-	}
-
-	_stats_dao = &statsdao.StatsDao{}
-
-	errData = _stats_dao.InitStatsDao(statsUrl, maxIdleConn, maxOpenConn)
-
-	if errData != nil {
-		errMsg := tlog.Error("init stats dao (%s, %d, %d) err (%v).", statsUrl, maxIdleConn, maxOpenConn, errData.Error())
-
-		tlog.AsyncSend(errData.AttachErrMsg(errMsg))
-
-		return
-	}
-
-	_forum_dao = &forumdao.ForumDao{}
-
-	errData = _forum_dao.InitForumDao(forumUrl, maxIdleConn, maxOpenConn)
-
-	if errData != nil {
-		errMsg := tlog.Error("init forum dao (%s, %d, %d) err (%v).", forumUrl, maxIdleConn, maxOpenConn, errData.Error())
+		errMsg := tlog.Error("init login dao (%s, %d, %d) err (%v).", loginUrl, maxIdleConn, maxOpenConn, errData.Error())
 
 		tlog.AsyncSend(errData.AttachErrMsg(errMsg))
 
@@ -94,14 +31,6 @@ func init() {
 	return
 }
 
-func GetMarketDao() *marketdao.MarketDao {
-	return _market_dao
-}
-
-func GetStatsDao() *statsdao.StatsDao {
-	return _stats_dao
-}
-
-func GetForumDao() *forumdao.ForumDao {
-	return _forum_dao
+func GetLoginDao() *logindao.LoginDao {
+	return _login_dao
 }

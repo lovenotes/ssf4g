@@ -16,11 +16,10 @@ const (
 	SERVICE_GM  = "0.0.0.0:8011"
 	SERVICE_RPC = "0.0.0.0:8021"
 
-	LOG_PATH = "/data/ssf4g/logs/resourcesrv.log"
+	LOG_PATH   = "/data/ssf4g/logs/resourcesrv.log"
+	SENTRY_DSN = ""
 
 	RESOURCE_DATA_PATH = "/data/ssf4g/data/resourcedata"
-
-	SENTRY_DSN = ""
 )
 
 type SrvConfig struct {
@@ -31,11 +30,10 @@ type SrvConfig struct {
 	ServiceGM  string
 	ServiceRPC string
 
-	LogPath string
+	LogPath   string
+	SentryDsn string
 
 	ResourceDataPath string
-
-	SentryDsn string
 }
 
 var (
@@ -95,15 +93,15 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %s).", "log_path", _conf_info.LogPath)
 	}
 
-	if _conf_info.ResourceDataPath = iniData.String("resource_data_path"); _conf_info.ResourceDataPath == "" {
-		_conf_info.ResourceDataPath = RESOURCE_DATA_PATH
-
-		tlog.Warn("reload srv config (%s) warn (default %s).", "resource_data_path", _conf_info.ResourceDataPath)
-	}
-
 	if _conf_info.SentryDsn = iniData.String("sentry_dsn"); _conf_info.SentryDsn == "" {
 		_conf_info.SentryDsn = SENTRY_DSN
 
 		tlog.Warn("reload srv config (%s) warn (default %s).", "sentry_dsn", _conf_info.SentryDsn)
+	}
+
+	if _conf_info.ResourceDataPath = iniData.String("resource_data_path"); _conf_info.ResourceDataPath == "" {
+		_conf_info.ResourceDataPath = RESOURCE_DATA_PATH
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "resource_data_path", _conf_info.ResourceDataPath)
 	}
 }

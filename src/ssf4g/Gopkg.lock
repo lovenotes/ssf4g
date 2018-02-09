@@ -20,6 +20,12 @@
   version = "2018.01.18"
 
 [[projects]]
+  name = "github.com/garyburd/redigo"
+  packages = ["internal","redis"]
+  revision = "d1ed5c67e5794de818ea85e6b522fda02623a484"
+  version = "v1.4.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/getsentry/raven-go"
   packages = ["."]
@@ -112,6 +118,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "19e7cb8ca58de8fb703b97fdf3540800801ac5d572625b943ffa1a6ab194ab69"
+  inputs-digest = "7b5fab259438a5960ba6a35d6d579cf0d2db64712eb23c3da5f1739ac9ad191a"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -13,14 +13,27 @@ const (
 	RUN_MODE = "dev"
 
 	SERVICE     = "0.0.0.0:8001"
-	SERVICE_GM  = "0.0.0.0:8011"
 	SERVICE_RPC = "0.0.0.0:8021"
 
-	LOG_PATH = "/data/ssf4g/logs/resourcesvr.log"
-
-	RESOURCE_DATA_PATH = "/data/ssf4g/data/resourcedata"
-
+	LOG_PATH   = "/data/ssf4g/logs/loginsrv.log"
 	SENTRY_DSN = ""
+
+	MAX_REGIST_ACCNT = 102290134
+
+	DB_MAX_IDLE_CONN = 10
+	DB_MAX_OPEN_CONN = 100
+
+	REDIS_MAX_IDLE_CONN = 10
+	REDIS_TIMEOUT       = 5
+
+	MEMCACHED_MAX_OPEN_CONN = 100
+
+	LOGIN_DB = "ssf4g:ssf4g@(127.0.0.1:3306)/login?timeout=30s&parseTime=true&loc=Local&charset=utf8"
+
+	ACCOUNT_REDIS_URL  = "127.0.0.1:6379"
+	ACCOUNT_REDIS_AUTH = ""
+
+	MEMCACHED_URL = "127.0.0.1:11211"
 )
 
 type SrvConfig struct {
@@ -28,14 +41,27 @@ type SrvConfig struct {
 	RunMode string
 
 	Service    string
-	ServiceGM  string
 	ServiceRPC string
 
-	LogPath string
-
-	ResourceDataPath string
-
+	LogPath   string
 	SentryDsn string
+
+	MaxRegistAccnt uint64
+
+	DBMaxIdleConn int
+	DBMaxOpenConn int
+
+	RedisMaxIdleConn int
+	RedisTimeout     int
+
+	MemcachedMaxOpenConn int
+
+	LoginDB string
+
+	AccountRedisUrl  string
+	AccountRedisAuth string
+
+	MemcachedUrl string
 }
 
 var (
@@ -77,12 +103,6 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %s).", "service", _conf_info.Service)
 	}
 
-	if _conf_info.ServiceGM = iniData.String("service_gm"); _conf_info.ServiceGM == "" {
-		_conf_info.ServiceGM = SERVICE_GM
-
-		tlog.Warn("reload srv config (%s) warn (default %s).", "service_gm", _conf_info.ServiceGM)
-	}
-
 	if _conf_info.ServiceRPC = iniData.String("service_rpc"); _conf_info.ServiceRPC == "" {
 		_conf_info.ServiceRPC = SERVICE_RPC
 
@@ -95,15 +115,117 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %s).", "log_path", _conf_info.LogPath)
 	}
 
-	if _conf_info.ResourceDataPath = iniData.String("resource_data_path"); _conf_info.ResourceDataPath == "" {
-		_conf_info.ResourceDataPath = RESOURCE_DATA_PATH
-
-		tlog.Warn("reload srv config (%s) warn (default %s).", "resource_data_path", _conf_info.ResourceDataPath)
-	}
-
 	if _conf_info.SentryDsn = iniData.String("sentry_dsn"); _conf_info.SentryDsn == "" {
 		_conf_info.SentryDsn = SENTRY_DSN
 
 		tlog.Warn("reload srv config (%s) warn (default %s).", "sentry_dsn", _conf_info.SentryDsn)
+	}
+
+	maxRegistAccnt, err := iniData.Int64("max_regist_aaccnt")
+
+	if err != nil {
+		_conf_info.MaxRegistAccnt = MAX_REGIST_ACCNT
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "max_regist_aaccnt", _conf_info.MaxRegistAccnt)
+	} else {
+		_conf_info.MaxRegistAccnt = uint64(maxRegistAccnt)
+	}
+
+	dbMaxIdleConn, err := iniData.Int("db_max_idle_conn")
+
+	if err != nil {
+		_conf_info.DBMaxIdleConn = DB_MAX_IDLE_CONN
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "db_max_idle_conn", _conf_info.DBMaxIdleConn)
+	} else {
+		_conf_info.DBMaxIdleConn = dbMaxIdleConn
+	}
+
+	dbMaxOpenConn, err := iniData.Int("db_max_open_conn")
+
+	if err != nil {
+		_conf_info.DBMaxOpenConn = DB_MAX_OPEN_CONN
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "db_max_open_conn", _conf_info.DBMaxOpenConn)
+	} else {
+		_conf_info.DBMaxOpenConn = dbMaxOpenConn
+	}
+
+	redisMaxIdleConn, err := iniData.Int("redis_max_idle_conn")
+
+	if err != nil {
+		_conf_info.RedisMaxIdleConn = REDIS_MAX_IDLE_CONN
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "redis_max_idle_conn", _conf_info.RedisMaxIdleConn)
+	} else {
+		_conf_info.RedisMaxIdleConn = redisMaxIdleConn
+	}
+
+	redisTimeout, err := iniData.Int("redis_timeout")
+
+	if err != nil {
+		_conf_info.RedisTimeout = REDIS_TIMEOUT
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "redis_timeout", _conf_info.RedisTimeout)
+	} else {
+		_conf_info.RedisTimeout = redisTimeout
+	}
+
+	memcachedMaxOpenConn, err := iniData.Int("memcached_max_open_conn")
+
+	if err != nil {
+		_conf_info.MemcachedMaxOpenConn = MEMCACHED_MAX_OPEN_CONN
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "memcached_max_open_conn", _conf_info.MemcachedMaxOpenConn)
+	} else {
+		_conf_info.MemcachedMaxOpenConn = memcachedMaxOpenConn
+	}
+
+	if _conf_info.RunMode == "prod" {
+		_conf_info.LoginDB = iniData.String("prod::login_db")
+	} else {
+		_conf_info.LoginDB = iniData.String("dev::login_db")
+	}
+
+	if _conf_info.LoginDB == "" {
+		_conf_info.LoginDB = LOGIN_DB
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "login_db", _conf_info.LoginDB)
+	}
+
+	if _conf_info.RunMode == "prod" {
+		_conf_info.AccountRedisUrl = iniData.String("prod::account_redis_url")
+	} else {
+		_conf_info.AccountRedisUrl = iniData.String("dev::account_redis_url")
+	}
+
+	if _conf_info.AccountRedisUrl == "" {
+		_conf_info.AccountRedisUrl = ACCOUNT_REDIS_URL
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "account_redis_url", _conf_info.AccountRedisUrl)
+	}
+
+	if _conf_info.RunMode == "prod" {
+		_conf_info.AccountRedisAuth = iniData.String("prod::account_redis_auth")
+	} else {
+		_conf_info.AccountRedisAuth = iniData.String("dev::account_redis_auth")
+	}
+
+	if _conf_info.AccountRedisAuth == "" {
+		_conf_info.AccountRedisAuth = ACCOUNT_REDIS_AUTH
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "account_redis_auth", _conf_info.AccountRedisAuth)
+	}
+
+	if _conf_info.RunMode == "prod" {
+		_conf_info.MemcachedUrl = iniData.String("prod::memcached_url")
+	} else {
+		_conf_info.MemcachedUrl = iniData.String("dev::memcached_url")
+	}
+
+	if _conf_info.MemcachedUrl == "" {
+		_conf_info.MemcachedUrl = MEMCACHED_URL
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "memcached_url", _conf_info.MemcachedUrl)
 	}
 }
