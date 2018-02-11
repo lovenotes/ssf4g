@@ -1,7 +1,6 @@
 package clienthandler
 
 import (
-	//	"encoding/json"
 	"bytes"
 	"fmt"
 	"io/ioutil"

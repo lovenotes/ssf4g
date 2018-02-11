@@ -1,4 +1,4 @@
-package errcontroller
+package clientcontroller
 
 import (
 	"net/http"
