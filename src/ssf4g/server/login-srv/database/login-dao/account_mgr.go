@@ -36,7 +36,7 @@ func (dao *LoginDao) GetMaxAccntID() (uint64, *tlog.ErrData) {
 }
 
 // Func - FirstOrInit账号信息
-func (dao *LoginDao) FirstOrInitAccount(accntname string, identifier string) (*Account, *tlog.ErrData) {
+func (dao *LoginDao) FirstOrInitAccount(accntname string) (*Account, *tlog.ErrData) {
 	account := &Account{}
 
 	retGorm := dao._db.Where(Account{AccntName: accntname}).FirstOrInit(account)

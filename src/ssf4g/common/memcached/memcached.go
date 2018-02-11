@@ -1,7 +1,7 @@
 package memcached
 
 import (
-	"ssf4g/libs/compress"
+	"ssf4g/common/compress"
 
 	"github.com/Terry-Mao/gomemcache/memcache"
 )

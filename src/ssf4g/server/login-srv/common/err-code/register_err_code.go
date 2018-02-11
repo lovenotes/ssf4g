@@ -1,0 +1,7 @@
+package errcode
+
+const (
+	REGISTER_ERR_CODE_TYPE_SUCCESS = iota
+
+	REGISTER_ERR_CODE_TYPE_ACCNT_EXIST = 1
+)
