@@ -6,7 +6,7 @@ import (
 	"ssf4g/common/tlog"
 	"ssf4g/protobuf/resource-proto"
 	"ssf4g/server/resource-srv/common/srv-config"
-	"ssf4g/server/resource-srv/handler/game-handler"
+	"ssf4g/server/resource-srv/rpc-service/handler/game-handler"
 
 	"google.golang.org/grpc"
 )

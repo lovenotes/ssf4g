@@ -7,8 +7,8 @@ import (
 	"ssf4g/common/utility"
 	"ssf4g/server/resource-srv/common/resource-data"
 	"ssf4g/server/resource-srv/common/srv-config"
-	"ssf4g/server/resource-srv/service/http-service"
-	"ssf4g/server/resource-srv/service/rpc-service"
+	"ssf4g/server/resource-srv/http-service"
+	"ssf4g/server/resource-srv/rpc-service"
 )
 
 func main() {

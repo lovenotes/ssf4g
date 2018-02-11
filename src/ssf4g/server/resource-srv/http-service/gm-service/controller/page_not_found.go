@@ -1,4 +1,4 @@
-package errcontroller
+package gmcontroller
 
 import (
 	"net/http"

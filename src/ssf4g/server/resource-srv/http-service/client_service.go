@@ -6,7 +6,7 @@ import (
 
 	"ssf4g/common/tlog"
 	"ssf4g/server/resource-srv/common/srv-config"
-	"ssf4g/server/resource-srv/router/client-router"
+	"ssf4g/server/resource-srv/http-service/client-service/router"
 
 	"github.com/gorilla/mux"
 )
