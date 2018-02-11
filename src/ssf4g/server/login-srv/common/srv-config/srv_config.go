@@ -18,7 +18,7 @@ const (
 	LOG_PATH   = "/data/ssf4g/logs/loginsrv.log"
 	SENTRY_DSN = ""
 
-	MAX_REGIST_ACCNT = 102290134
+	ACCNT_REGISTER_LIMIT = 102290134
 
 	DB_MAX_IDLE_CONN = 10
 	DB_MAX_OPEN_CONN = 100
@@ -46,7 +46,7 @@ type SrvConfig struct {
 	LogPath   string
 	SentryDsn string
 
-	MaxRegistAccnt uint64
+	AccntRegisterLimit uint64
 
 	DBMaxIdleConn int
 	DBMaxOpenConn int
@@ -121,14 +121,14 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %s).", "sentry_dsn", _conf_info.SentryDsn)
 	}
 
-	maxRegistAccnt, err := iniData.Int64("max_regist_aaccnt")
+	accntRegisterLimit, err := iniData.Int64("accnt_register_limit")
 
 	if err != nil {
-		_conf_info.MaxRegistAccnt = MAX_REGIST_ACCNT
+		_conf_info.AccntRegisterLimit = ACCNT_REGISTER_LIMIT
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "max_regist_aaccnt", _conf_info.MaxRegistAccnt)
+		tlog.Warn("reload srv config (%s) warn (default %s).", "accnt_register_limit", _conf_info.AccntRegisterLimit)
 	} else {
-		_conf_info.MaxRegistAccnt = uint64(maxRegistAccnt)
+		_conf_info.AccntRegisterLimit = uint64(accntRegisterLimit)
 	}
 
 	dbMaxIdleConn, err := iniData.Int("db_max_idle_conn")

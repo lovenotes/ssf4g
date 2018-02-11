@@ -1,5 +1,6 @@
-package clienthandler
+package clientcontroller
 
+/*
 import (
 	"bytes"
 	"fmt"
@@ -54,16 +55,7 @@ func UserRegister(wr http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/*
-		login_type := params.Get("login_type")
-		loginType, err := strconv.Atoi(login_type)
-		if err != nil {
-			logger.GetNLog().Error("get login_type (%s) atoi err (%v).", login_type, err)
-			res["ret"] = errcode.ERR_COM_PARAM_ILLEGAL
-			res["msg"] = gamedatamgr.GetErrCodeMsg(errcode.ERR_COM_PARAM_ILLEGAL)
-			return
-		}
-	*/
+
 
 	platform_type := params.Get("platform_type")
 	platformType, err := strconv.Atoi(platform_type)
@@ -111,15 +103,7 @@ func UserRegister(wr http.ResponseWriter, r *http.Request) {
 
 	currentIP := util.GetIP(r)
 
-	/*
-		if svrconfig.GetConfig().LoginType != consts.LOGIN_TYPE_DEFAULT &&
-			svrconfig.GetConfig().LoginType != int32(loginType) {
-			logger.GetNLog().Error("login_type (%d, %d) err (param illegal).", svrconfig.GetConfig().LoginType, loginType)
-			res["ret"] = errcode.ERR_COM_PARAM_ILLEGAL
-			res["msg"] = gamedatamgr.GetErrCodeMsg(errcode.ERR_COM_PARAM_ILLEGAL)
-			return
-		}
-	*/
+
 
 	// 注册渠道, tchannel
 	account, ret := accntmgr.RegisterAccnt(accntName, accntPass, email, phone, realName, IDNumber, currentIP, uint8(platformType))
@@ -137,3 +121,4 @@ func UserRegister(wr http.ResponseWriter, r *http.Request) {
 		logger.GetTLog().GenAccntRegist(accntName, account.AccntID, int32(platformType), telecomOper, int32(registChannel)),
 		logger.GetTLog().MapIDToConIdx())
 }
+*/

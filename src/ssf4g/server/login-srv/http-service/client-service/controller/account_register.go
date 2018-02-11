@@ -1,21 +1,17 @@
-package clienthandler
+package clientcontroller
 
 import (
-	"bytes"
-	"fmt"
-	"io/ioutil"
 	"net/http"
-	"net/url"
-	"strconv"
-	"time"
 
+	"ssf4g/common/http-const"
 	"ssf4g/common/tlog"
 	"ssf4g/common/utility"
-	"ssf4g/server/login-srv/handler/client-model"
+	"ssf4g/gamedata/resp-data"
+	"ssf4g/server/login-srv/http-service/client-service/model"
 )
 
 // Func - 账号注册
-func AccountRegister(wr http.ResponseWriter, r *http.Request) {
+func AccountRegister(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	accntName := ""
@@ -31,7 +27,7 @@ func AccountRegister(wr http.ResponseWriter, r *http.Request) {
 	if strAccntName != "" {
 		accntName = strAccntName
 	} else {
-		tlog.Error("account register (%v) err (accnt_name nil).", r)
+		tlog.Error("account register controller (%v) err (accnt_name nil).", r)
 
 		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_INVALID_REQ, "accnt_name illegal")
 
@@ -48,20 +44,22 @@ func AccountRegister(wr http.ResponseWriter, r *http.Request) {
 	if strAccntPass != "" {
 		accntPass = strAccntPass
 	} else {
-		tlog.Error("account register (%v) err (accnt_pass nil).", r)
+		tlog.Error("account register controller (%v) err (accnt_pass nil).", r)
 
 		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_INVALID_REQ, "accnt_pass illegal")
 
 		return
 	}
 
-	realIP := utility.GetIP(r)
+	realIP := utility.GetRealIP(r)
 
-	// 注册渠道, tchannel
-	account, errData := clientmodel.AccountRegister(accntName, accntPass, realIP)
+	errData := clientmodel.AccountRegister(w, accntName, accntPass, realIP)
 
 	if errData != nil {
+		tlog.Error("account register controller (%v) err (model %v).", r, errData.Error())
 
+		return
 	}
 
+	return
 }

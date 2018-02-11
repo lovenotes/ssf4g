@@ -1,55 +1,96 @@
 package clientmodel
 
 import (
+	"net/http"
+
+	"ssf4g/common/crypto"
+	"ssf4g/common/http-const"
 	"ssf4g/common/tlog"
+	"ssf4g/gamedata/resp-data"
 	"ssf4g/server/login-srv/common/err-code"
+	"ssf4g/server/login-srv/common/srv-config"
 	"ssf4g/server/login-srv/database"
+	"ssf4g/server/login-srv/redis"
 )
 
-func AccountRegister(accntname, accntpass, realip string) (uint32, *tlog.ErrData) {
-	accountDB, errData := dbmgr.GetLoginDao().FirstOrInitAccount()
+func AccountRegister(w http.ResponseWriter, accntname, accntpass, realip string) *tlog.ErrData {
+	accountDB, errData := dbmgr.GetLoginDao().FirstOrInitAccount(accntname)
 
-	if err != nil {
-		errMsg := tlog.Error("account register model (%s, %s, %s) err (database %v).", accntname, accntpass, realip, errData.Error())
+	if errData != nil {
+		errMsg := tlog.Error("account register model (%s, %s, %s) err (account first init %v).", accntname, accntpass, realip, errData.Error())
 
-		return nil, errData.AttachErrMsg(errMsg)
+		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_SERVER_ERROR, "login database err")
+
+		return errData.AttachErrMsg(errMsg)
 	}
 
-	if accountDB != nil {
-		tlog.Warn("account register model (%s, %s, %s) err (account exists).", accntname, accntpass, realip)
+	if accountDB != nil && accountDB.AccntId != 0 {
+		tlog.Warn("account register model (%s, %s, %s) warn (accnt name exist).", accntname, accntpass, realip)
 
-		return nil, errconst.LOGIN_ERR_TYPE_ACCOUNT_EXIST
+		respData := map[string]interface{}{
+			"err_code": errcode.REGISTER_ERR_CODE_TYPE_ACCNT_EXIST,
+		}
+
+		respdata.BuildRespSuccessRetData(w, 0, respData)
+
+		return nil
 	}
 
-	accntInfo := &account.Account{}
-	accntInfo.AccntName = accntname
-	accntInfo.PassHash = crypto.Sha1Hash(accntname + pass)
-	accntInfo.Email = email
-	accntInfo.Phone = phone
-	accntInfo.RealName = realname
-	accntInfo.IDNumber = idnumber
-	accntInfo.LastIP = curip
-	accntInfo.Platform = platform
-	accntInfo.CreateTime = time.Now()
-	accntInfo.ModifyTime = time.Now()
+	accountDB.PassHash = crypto.EncryptSha1Hash(accntname + accntpass)
+	accountDB.LastIp = realip
 
-	ticketID, ret := getUniqueAccntID()
+	accntRegisterLimit := srvconfig.GetConfig().AccntRegisterLimit
 
-	if ret != errcode.ERR_COM_SUCCESS {
-		logger.GetNLog().Error("get unique accnt id (%s, %d, %s) err (%v).",
-			accntname, platform, curip, ret)
-		return nil, ret
+	ticketID, errData := redismgr.GetAccountRedis().GetTicketID()
+
+	if errData != nil {
+		errMsg := tlog.Error("account register model err (get ticket id %v).", errData.Error())
+
+		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_SERVER_ERROR, "ticket redis err")
+
+		return errData.AttachErrMsg(errMsg)
 	}
 
-	logger.GetNLog().Debug("register accnt (%s, %d, %s) ticketid: %v success.", accntname, platform, curip, ticketID)
+	if accntRegisterLimit != 0 && ticketID >= accntRegisterLimit {
+		tlog.Warn("account register model (%s, %s, %s) warn (register limit).", accntname, accntpass, realip)
 
-	_, err = _accnt_dao.CreateAccnt(accntInfo, ticketID)
+		respData := map[string]interface{}{
+			"err_code": errcode.REGISTER_ERR_CODE_TYPE_REGISTER_LIMIT,
+		}
 
-	if err != nil {
-		logger.GetNLog().Error("create accnt (%s, %d, %s) err (%v).", accntname, platform, curip, err)
-		return nil, errcode.ERR_COM_DB_ERROR
+		respdata.BuildRespSuccessRetData(w, 0, respData)
+
+		return nil
 	}
-	accntInfo.AccntID = ticketID
 
-	return accntInfo, errcode.ERR_COM_SUCCESS
+	// real check the new user limits
+	ticketID, errData = redismgr.GetAccountRedis().GenTicketID()
+
+	if errData != nil {
+		errMsg := tlog.Error("account register model err (gen ticket id %v).", errData.Error())
+
+		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_SERVER_ERROR, "ticket redis err")
+
+		return errData.AttachErrMsg(errMsg)
+	}
+
+	accountDB.AccntId = ticketID
+
+	errData = dbmgr.GetLoginDao().SaveAccount(accountDB)
+
+	if errData != nil {
+		errMsg := tlog.Error("account register model (%s, %d) err (account save %v).", accntname, ticketID, errData.Error())
+
+		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_SERVER_ERROR, "account database err")
+
+		return errData.AttachErrMsg(errMsg)
+	}
+
+	respData := map[string]interface{}{
+		"accnt_id": ticketID,
+	}
+
+	respdata.BuildRespSuccessRetData(w, 0, respData)
+
+	return nil
 }

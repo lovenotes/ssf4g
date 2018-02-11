@@ -74,13 +74,13 @@ func (dao *TicketRedis) InitAccntTicket(zoneid int32) (int64, error) {
 */
 
 // Func - 获取当前AccntTicket值
-func (dao *AccountRedis) GetTicketID() (int64, *tlog.ErrData) {
+func (dao *AccountRedis) GetTicketID() (uint64, *tlog.ErrData) {
 	con := dao._pool.Get()
 	defer con.Close()
 
 	ticketKey := fmt.Sprintf(comconst.AccntTicketKey)
 
-	ticketID, err := redis.Int64(con.Do("GET", ticketKey))
+	ticketID, err := redis.Uint64(con.Do("GET", ticketKey))
 
 	if err != nil {
 		errMsg := tlog.Error("get ticket id (%s) err (redis get %v).", ticketKey, err)
@@ -94,13 +94,13 @@ func (dao *AccountRedis) GetTicketID() (int64, *tlog.ErrData) {
 }
 
 // Func - 生成并获取新的TicketID
-func (dao *AccountRedis) GenTicketID() (int64, *tlog.ErrData) {
+func (dao *AccountRedis) GenTicketID() (uint64, *tlog.ErrData) {
 	con := dao._pool.Get()
 	defer con.Close()
 
 	ticketKey := fmt.Sprintf(comconst.AccntTicketKey)
 
-	ticketID, err := redis.Int64(con.Do("INCR", ticketKey))
+	ticketID, err := redis.Uint64(con.Do("INCR", ticketKey))
 
 	if err != nil {
 		errMsg := tlog.Error("gen ticket id (%s) err (redis incr %v).", ticketKey, err)
