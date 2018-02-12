@@ -7,6 +7,7 @@ import (
 	"ssf4g/common/utility"
 	"ssf4g/server/login-srv/common/srv-config"
 	"ssf4g/server/login-srv/http-service"
+	"ssf4g/server/login-srv/srv-service/accnt-ticket"
 )
 
 func main() {
@@ -47,5 +48,5 @@ func startup() {
 // 初始化各个模块
 func initModel() {
 	// 初始化TicketID
-
+	accntticketmgr.InitAccntTicket()
 }
