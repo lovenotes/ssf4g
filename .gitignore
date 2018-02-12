@@ -2,3 +2,4 @@
 *.a
 src/ssf4g/server/resource-srv/resource-srv
 src/ssf4g/server/resource-srv/resource-srv.pid
+src/ssf4g/server/login-srv/login-srv

@@ -9,8 +9,8 @@ import (
 	"ssf4g/gamedata/resp-data"
 	"ssf4g/server/login-srv/common/err-code"
 	"ssf4g/server/login-srv/common/srv-config"
-	"ssf4g/server/login-srv/database"
-	"ssf4g/server/login-srv/redis"
+	"ssf4g/server/login-srv/dao-service/database"
+	"ssf4g/server/login-srv/dao-service/redis"
 )
 
 func AccountRegister(w http.ResponseWriter, accntname, accntpass, realip string) *tlog.ErrData {

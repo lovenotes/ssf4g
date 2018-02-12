@@ -1,25 +1,23 @@
-package accountredis
+package accntticket
 
 import (
-	"fmt"
-
-	"ssf4g/common/com-const"
-	"ssf4g/common/tlog"
-
-	"github.com/garyburd/redigo/redis"
+	"bosslove/common/consts"
+	"bosslove/common/logger"
+	"bosslove/common/rediss"
+	"bosslove/common/utils"
+	"bosslove/loginsvr/common/consts"
+	"bosslove/loginsvr/common/svrconfig"
 )
 
-/*
-// 初始化Redis内AccountID使用的Ticket信息
-func (dao *TicketRedis) InitAccntTicket(zoneid int32) (int64, error) {
-	con := dao._pool.Get()
+// Func - 初始化AccntTicket信息
+func InitAccntTicket() (int64, error) {
+	// get the ticket from redis
+	con := rediss.GetPool().Get()
 	defer con.Close()
 
 	// 获取Redis内的最大AccntID
 	ticketKey := util.GenRedisKeyInt32(consts.AccntGolbalTicket, zoneid)
-
 	ticket, err := redis.Int64(con.Do("GET", ticketKey))
-
 	switch {
 	case err == redis.ErrNil:
 		break
@@ -70,45 +68,4 @@ func (dao *TicketRedis) InitAccntTicket(zoneid int32) (int64, error) {
 		}
 	}
 	return ticket, nil
-}
-*/
-
-// Func - 获取当前AccntTicket值
-func (dao *AccountRedis) GetTicketID() (uint64, *tlog.ErrData) {
-	con := dao._pool.Get()
-	defer con.Close()
-
-	ticketKey := fmt.Sprintf(comconst.AccntTicketKey)
-
-	ticketID, err := redis.Uint64(con.Do("GET", ticketKey))
-
-	if err != nil {
-		errMsg := tlog.Error("get ticket id (%s) err (redis get %v).", ticketKey, err)
-
-		return 0, tlog.NewErrData(err, errMsg)
-	}
-
-	tlog.Info("get ticket id info (%d).", ticketID)
-
-	return ticketID, nil
-}
-
-// Func - 生成并获取新的TicketID
-func (dao *AccountRedis) GenTicketID() (uint64, *tlog.ErrData) {
-	con := dao._pool.Get()
-	defer con.Close()
-
-	ticketKey := fmt.Sprintf(comconst.AccntTicketKey)
-
-	ticketID, err := redis.Uint64(con.Do("INCR", ticketKey))
-
-	if err != nil {
-		errMsg := tlog.Error("gen ticket id (%s) err (redis incr %v).", ticketKey, err)
-
-		return 0, tlog.NewErrData(err, errMsg)
-	}
-
-	tlog.Debug("gen ticket id warn (%d).", ticketID)
-
-	return ticketID, nil
 }

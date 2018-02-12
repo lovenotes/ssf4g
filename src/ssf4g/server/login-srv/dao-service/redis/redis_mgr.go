@@ -3,7 +3,7 @@ package redismgr
 import (
 	"ssf4g/common/tlog"
 	"ssf4g/server/login-srv/common/srv-config"
-	"ssf4g/server/login-srv/redis/account-redis"
+	"ssf4g/server/login-srv/dao-service/redis/account-redis"
 )
 
 var (

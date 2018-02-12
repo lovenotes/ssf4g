@@ -3,7 +3,7 @@ package dbmgr
 import (
 	"ssf4g/common/tlog"
 	"ssf4g/server/login-srv/common/srv-config"
-	"ssf4g/server/login-srv/database/login-dao"
+	"ssf4g/server/login-srv/dao-service/database/login-dao"
 )
 
 var (

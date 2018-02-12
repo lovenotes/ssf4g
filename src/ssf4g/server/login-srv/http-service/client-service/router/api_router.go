@@ -1,7 +1,7 @@
 package clientrouter
 
 import (
-	"ssf4g/server/login-srv/handler/client-controller"
+	"ssf4g/server/login-srv/http-service/client-service/controller"
 
 	"github.com/gorilla/mux"
 )
