@@ -3,8 +3,8 @@ package memcachedmgr
 import (
 	"ssf4g/common/memcached"
 	"ssf4g/common/tlog"
-	"ssf4g/server/login-srv/common/srv-config"
-	"ssf4g/server/login-srv/dao-service/memcached/account-memcached"
+	"ssf4g/server/portal-srv/common/srv-config"
+	"ssf4g/server/portal-srv/dao-service/memcached/account-memcached"
 )
 
 var (

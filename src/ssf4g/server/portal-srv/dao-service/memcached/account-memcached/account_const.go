@@ -5,4 +5,7 @@ const (
 
 	ACCNT_TOKEN_KEY = "token"
 	ACCNT_TOKEN_VER = 1
+
+	ACCNT_POS_KEY = "pos"
+	ACCNT_POS_VER = 1
 )
