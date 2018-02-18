@@ -1,0 +1,7 @@
+package errcode
+
+const (
+	SRV_DETAIL_ERR_CODE_TYPE_SUCCESS = iota
+
+	SRV_DETAIL_ERR_CODE_TYPE_TOKEN_ILLEGAL = 1
+)

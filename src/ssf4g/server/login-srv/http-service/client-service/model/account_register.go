@@ -17,15 +17,15 @@ func AccountRegister(w http.ResponseWriter, accntname, accntpass, realip string)
 	accountDB, errData := dbmgr.GetLoginDao().FirstOrInitAccount(accntname)
 
 	if errData != nil {
-		errMsg := tlog.Error("account register model (%s, %s, %s) err (account first init %v).", accntname, accntpass, realip, errData.Error())
+		errMsg := tlog.Error("account register model (%s) err (first init accnt %v).", accntname, errData.Error())
 
-		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_SERVER_ERROR, "login database err")
+		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_SERVER_ERROR, "account database err")
 
 		return errData.AttachErrMsg(errMsg)
 	}
 
 	if accountDB != nil && accountDB.AccntId != 0 {
-		tlog.Warn("account register model (%s, %s, %s) warn (accnt name exist).", accntname, accntpass, realip)
+		tlog.Warn("account register model (%s) warn (accnt name exist).", accntname)
 
 		respData := map[string]interface{}{
 			"err_code": errcode.REGISTER_ERR_CODE_TYPE_ACCNT_EXIST,
@@ -52,7 +52,7 @@ func AccountRegister(w http.ResponseWriter, accntname, accntpass, realip string)
 	}
 
 	if accntRegisterLimit != 0 && ticketID >= accntRegisterLimit {
-		tlog.Warn("account register model (%s, %s, %s) warn (register limit).", accntname, accntpass, realip)
+		tlog.Warn("account register model (%s) warn (register limit).", accntname)
 
 		respData := map[string]interface{}{
 			"err_code": errcode.REGISTER_ERR_CODE_TYPE_REGISTER_LIMIT,
@@ -79,7 +79,7 @@ func AccountRegister(w http.ResponseWriter, accntname, accntpass, realip string)
 	errData = dbmgr.GetLoginDao().SaveAccount(accountDB)
 
 	if errData != nil {
-		errMsg := tlog.Error("account register model (%s, %d) err (account save %v).", accntname, ticketID, errData.Error())
+		errMsg := tlog.Error("account register model (%s, %d) err (save accnt %v).", accntname, ticketID, errData.Error())
 
 		respdata.BuildRespFailedRetData(w, httpconst.STATUS_CODE_TYPE_SERVER_ERROR, "account database err")
 
