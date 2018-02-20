@@ -29,16 +29,20 @@ const (
 	REDIS_MAX_IDLE_CONN = 10
 	REDIS_TIMEOUT       = 5
 
+	MEMCACHED_MAX_OPEN_CONN = 100
+
 	GAME_DB = "ssf4g:ssf4g@(127.0.0.1:3306)/game?timeout=30s&parseTime=true&loc=Local&charset=utf8"
 
 	SERVER_REDIS_URL  = "127.0.0.1:6379"
 	SERVER_REDIS_AUTH = ""
+
+	MEMCACHED_URL = "127.0.0.1:11211"
 )
 
 type SrvConfig struct {
 	SrvName string
-	ZoneID  int32
-	SrvID   int32
+	ZoneID  uint32
+	SrvID   uint32
 	SrvVer  string
 	RunMode string
 
@@ -47,8 +51,6 @@ type SrvConfig struct {
 
 	LogPath   string
 	SentryDsn string
-
-	AccntRegisterLimit uint64
 
 	DBMaxIdleConn int
 	DBMaxOpenConn int
@@ -100,7 +102,7 @@ func ReloadSrvConfig() {
 
 		tlog.Warn("reload srv config (%s) warn (default %d).", "zone_id", _conf_info.ZoneID)
 	} else {
-		_conf_info.ZoneID = int32(zoneID)
+		_conf_info.ZoneID = uint32(zoneID)
 	}
 
 	srvID, err := iniData.Int("srv_id")
@@ -110,7 +112,7 @@ func ReloadSrvConfig() {
 
 		tlog.Warn("reload srv config (%s) warn (default %d).", "srv_id", _conf_info.SrvID)
 	} else {
-		_conf_info.SrvID = int32(srvID)
+		_conf_info.SrvID = uint32(srvID)
 	}
 
 	if _conf_info.SrvVer = iniData.String("srv_ver"); _conf_info.SrvVer == "" {
@@ -189,6 +191,16 @@ func ReloadSrvConfig() {
 		_conf_info.RedisTimeout = redisTimeout
 	}
 
+	memcachedMaxOpenConn, err := iniData.Int("memcached_max_open_conn")
+
+	if err != nil {
+		_conf_info.MemcachedMaxOpenConn = MEMCACHED_MAX_OPEN_CONN
+
+		tlog.Warn("reload srv config (%s) warn (default %d).", "memcached_max_open_conn", _conf_info.MemcachedMaxOpenConn)
+	} else {
+		_conf_info.MemcachedMaxOpenConn = memcachedMaxOpenConn
+	}
+
 	if _conf_info.RunMode == "prod" {
 		_conf_info.GameDB = iniData.String("prod::game_db")
 	} else {
@@ -223,5 +235,11 @@ func ReloadSrvConfig() {
 		_conf_info.ServerRedisAuth = SERVER_REDIS_AUTH
 
 		tlog.Warn("reload srv config (%s) warn (default %s).", "server_redis_auth", _conf_info.ServerRedisAuth)
+	}
+
+	if _conf_info.MemcachedUrl == "" {
+		_conf_info.MemcachedUrl = MEMCACHED_URL
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "memcached_url", _conf_info.MemcachedUrl)
 	}
 }
