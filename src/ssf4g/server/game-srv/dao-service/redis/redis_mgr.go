@@ -2,8 +2,8 @@ package redismgr
 
 import (
 	"ssf4g/common/tlog"
-	"ssf4g/server/portal-srv/common/srv-config"
-	"ssf4g/server/portal-srv/dao-service/redis/server-redis"
+	"ssf4g/server/game-srv/common/srv-config"
+	"ssf4g/server/game-srv/dao-service/redis/server-redis"
 )
 
 var (

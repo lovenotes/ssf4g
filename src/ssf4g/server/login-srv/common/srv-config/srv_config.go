@@ -126,7 +126,7 @@ func ReloadSrvConfig() {
 	if err != nil {
 		_conf_info.AccntRegisterLimit = ACCNT_REGISTER_LIMIT
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "accnt_register_limit", _conf_info.AccntRegisterLimit)
+		tlog.Warn("reload srv config (%s) warn (default %d).", "accnt_register_limit", _conf_info.AccntRegisterLimit)
 	} else {
 		_conf_info.AccntRegisterLimit = uint64(accntRegisterLimit)
 	}
@@ -136,7 +136,7 @@ func ReloadSrvConfig() {
 	if err != nil {
 		_conf_info.DBMaxIdleConn = DB_MAX_IDLE_CONN
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "db_max_idle_conn", _conf_info.DBMaxIdleConn)
+		tlog.Warn("reload srv config (%s) warn (default %d).", "db_max_idle_conn", _conf_info.DBMaxIdleConn)
 	} else {
 		_conf_info.DBMaxIdleConn = dbMaxIdleConn
 	}
@@ -146,7 +146,7 @@ func ReloadSrvConfig() {
 	if err != nil {
 		_conf_info.DBMaxOpenConn = DB_MAX_OPEN_CONN
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "db_max_open_conn", _conf_info.DBMaxOpenConn)
+		tlog.Warn("reload srv config (%s) warn (default %d).", "db_max_open_conn", _conf_info.DBMaxOpenConn)
 	} else {
 		_conf_info.DBMaxOpenConn = dbMaxOpenConn
 	}
@@ -156,7 +156,7 @@ func ReloadSrvConfig() {
 	if err != nil {
 		_conf_info.RedisMaxIdleConn = REDIS_MAX_IDLE_CONN
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "redis_max_idle_conn", _conf_info.RedisMaxIdleConn)
+		tlog.Warn("reload srv config (%s) warn (default %d).", "redis_max_idle_conn", _conf_info.RedisMaxIdleConn)
 	} else {
 		_conf_info.RedisMaxIdleConn = redisMaxIdleConn
 	}
@@ -166,7 +166,7 @@ func ReloadSrvConfig() {
 	if err != nil {
 		_conf_info.RedisTimeout = REDIS_TIMEOUT
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "redis_timeout", _conf_info.RedisTimeout)
+		tlog.Warn("reload srv config (%s) warn (default %d).", "redis_timeout", _conf_info.RedisTimeout)
 	} else {
 		_conf_info.RedisTimeout = redisTimeout
 	}
@@ -176,7 +176,7 @@ func ReloadSrvConfig() {
 	if err != nil {
 		_conf_info.MemcachedMaxOpenConn = MEMCACHED_MAX_OPEN_CONN
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "memcached_max_open_conn", _conf_info.MemcachedMaxOpenConn)
+		tlog.Warn("reload srv config (%s) warn (default %d).", "memcached_max_open_conn", _conf_info.MemcachedMaxOpenConn)
 	} else {
 		_conf_info.MemcachedMaxOpenConn = memcachedMaxOpenConn
 	}

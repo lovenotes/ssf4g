@@ -8,41 +8,52 @@ import (
 )
 
 const (
-	SRV_NAME = "portal-srv"
+	SRV_NAME = "login_srv"
+
+	SRV_ID = 1
 
 	RUN_MODE = "dev"
 
-	SERVICE    = "0.0.0.0:8001"
-	SERVICE_GM = "0.0.0.0:8021"
+	SERVICE     = "0.0.0.0:8001"
+	SERVICE_RPC = "0.0.0.0:8002"
 
-	LOG_PATH   = "/data/ssf4g/logs/portalsrv.log"
+	LOG_PATH   = "/data/ssf4g/logs/gamesrv.log"
 	SENTRY_DSN = ""
+
+	DB_MAX_IDLE_CONN = 10
+	DB_MAX_OPEN_CONN = 100
 
 	REDIS_MAX_IDLE_CONN = 10
 	REDIS_TIMEOUT       = 5
 
-	MEMCACHED_MAX_OPEN_CONN = 100
+	GAME_DB = "ssf4g:ssf4g@(127.0.0.1:3306)/game?timeout=30s&parseTime=true&loc=Local&charset=utf8"
 
 	SERVER_REDIS_URL  = "127.0.0.1:6379"
 	SERVER_REDIS_AUTH = ""
-
-	MEMCACHED_URL = "127.0.0.1:11211"
 )
 
 type SrvConfig struct {
 	SrvName string
+	SrvID   int32
 	RunMode string
 
-	Service   string
-	ServiceGM string
+	Service    string
+	ServiceRPC string
 
 	LogPath   string
 	SentryDsn string
+
+	AccntRegisterLimit uint64
+
+	DBMaxIdleConn int
+	DBMaxOpenConn int
 
 	RedisMaxIdleConn int
 	RedisTimeout     int
 
 	MemcachedMaxOpenConn int
+
+	GameDB string
 
 	ServerRedisUrl  string
 	ServerRedisAuth string
@@ -77,6 +88,16 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %s).", "srv_name", _conf_info.SrvName)
 	}
 
+	srvID, err := iniData.Int("srv_id")
+
+	if err != nil {
+		_conf_info.SrvID = SRV_ID
+
+		tlog.Warn("reload srv config (%s) warn (default %d).", "srv_id", _conf_info.SrvID)
+	} else {
+		_conf_info.SrvID = int32(srvID)
+	}
+
 	if _conf_info.RunMode = iniData.String("run_mode"); _conf_info.RunMode == "" {
 		_conf_info.RunMode = RUN_MODE
 
@@ -89,10 +110,10 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %s).", "service", _conf_info.Service)
 	}
 
-	if _conf_info.ServiceGM = iniData.String("service_gm"); _conf_info.ServiceGM == "" {
-		_conf_info.ServiceGM = SERVICE_GM
+	if _conf_info.ServiceRPC = iniData.String("service_rpc"); _conf_info.ServiceRPC == "" {
+		_conf_info.ServiceRPC = SERVICE_RPC
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "service_gm", _conf_info.ServiceGM)
+		tlog.Warn("reload srv config (%s) warn (default %s).", "service_rpc", _conf_info.ServiceRPC)
 	}
 
 	if _conf_info.LogPath = iniData.String("log_path"); _conf_info.LogPath == "" {
@@ -105,6 +126,26 @@ func ReloadSrvConfig() {
 		_conf_info.SentryDsn = SENTRY_DSN
 
 		tlog.Warn("reload srv config (%s) warn (default %s).", "sentry_dsn", _conf_info.SentryDsn)
+	}
+
+	dbMaxIdleConn, err := iniData.Int("db_max_idle_conn")
+
+	if err != nil {
+		_conf_info.DBMaxIdleConn = DB_MAX_IDLE_CONN
+
+		tlog.Warn("reload srv config (%s) warn (default %d).", "db_max_idle_conn", _conf_info.DBMaxIdleConn)
+	} else {
+		_conf_info.DBMaxIdleConn = dbMaxIdleConn
+	}
+
+	dbMaxOpenConn, err := iniData.Int("db_max_open_conn")
+
+	if err != nil {
+		_conf_info.DBMaxOpenConn = DB_MAX_OPEN_CONN
+
+		tlog.Warn("reload srv config (%s) warn (default %d).", "db_max_open_conn", _conf_info.DBMaxOpenConn)
+	} else {
+		_conf_info.DBMaxOpenConn = dbMaxOpenConn
 	}
 
 	redisMaxIdleConn, err := iniData.Int("redis_max_idle_conn")
@@ -127,14 +168,16 @@ func ReloadSrvConfig() {
 		_conf_info.RedisTimeout = redisTimeout
 	}
 
-	memcachedMaxOpenConn, err := iniData.Int("memcached_max_open_conn")
-
-	if err != nil {
-		_conf_info.MemcachedMaxOpenConn = MEMCACHED_MAX_OPEN_CONN
-
-		tlog.Warn("reload srv config (%s) warn (default %d).", "memcached_max_open_conn", _conf_info.MemcachedMaxOpenConn)
+	if _conf_info.RunMode == "prod" {
+		_conf_info.GameDB = iniData.String("prod::game_db")
 	} else {
-		_conf_info.MemcachedMaxOpenConn = memcachedMaxOpenConn
+		_conf_info.GameDB = iniData.String("dev::game_db")
+	}
+
+	if _conf_info.GameDB == "" {
+		_conf_info.GameDB = GAME_DB
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "game_db", _conf_info.GameDB)
 	}
 
 	if _conf_info.RunMode == "prod" {
@@ -159,17 +202,5 @@ func ReloadSrvConfig() {
 		_conf_info.ServerRedisAuth = SERVER_REDIS_AUTH
 
 		tlog.Warn("reload srv config (%s) warn (default %s).", "server_redis_auth", _conf_info.ServerRedisAuth)
-	}
-
-	if _conf_info.RunMode == "prod" {
-		_conf_info.MemcachedUrl = iniData.String("prod::memcached_url")
-	} else {
-		_conf_info.MemcachedUrl = iniData.String("dev::memcached_url")
-	}
-
-	if _conf_info.MemcachedUrl == "" {
-		_conf_info.MemcachedUrl = MEMCACHED_URL
-
-		tlog.Warn("reload srv config (%s) warn (default %s).", "memcached_url", _conf_info.MemcachedUrl)
 	}
 }
