@@ -8,8 +8,8 @@ It is generated from these files:
 	game_intr_rpc.proto
 
 It has these top-level messages:
-	S2RZoneStatusGetReqProto
-	S2RZoneStatusGetRespProto
+	ZoneStatusGetReqProto
+	ZoneStatusGetRespProto
 */
 package resourceproto
 
@@ -33,40 +33,40 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type S2RZoneStatusGetReqProto struct {
+type ZoneStatusGetReqProto struct {
 	ZoneID uint32 `protobuf:"varint,1,opt,name=zoneID" json:"zoneID,omitempty"`
 }
 
-func (m *S2RZoneStatusGetReqProto) Reset()                    { *m = S2RZoneStatusGetReqProto{} }
-func (m *S2RZoneStatusGetReqProto) String() string            { return proto.CompactTextString(m) }
-func (*S2RZoneStatusGetReqProto) ProtoMessage()               {}
-func (*S2RZoneStatusGetReqProto) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+func (m *ZoneStatusGetReqProto) Reset()                    { *m = ZoneStatusGetReqProto{} }
+func (m *ZoneStatusGetReqProto) String() string            { return proto.CompactTextString(m) }
+func (*ZoneStatusGetReqProto) ProtoMessage()               {}
+func (*ZoneStatusGetReqProto) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
-func (m *S2RZoneStatusGetReqProto) GetZoneID() uint32 {
+func (m *ZoneStatusGetReqProto) GetZoneID() uint32 {
 	if m != nil {
 		return m.ZoneID
 	}
 	return 0
 }
 
-type S2RZoneStatusGetRespProto struct {
+type ZoneStatusGetRespProto struct {
 	ZoneID     uint32 `protobuf:"varint,1,opt,name=zoneID" json:"zoneID,omitempty"`
 	ZoneStatus int32  `protobuf:"varint,2,opt,name=zoneStatus" json:"zoneStatus,omitempty"`
 }
 
-func (m *S2RZoneStatusGetRespProto) Reset()                    { *m = S2RZoneStatusGetRespProto{} }
-func (m *S2RZoneStatusGetRespProto) String() string            { return proto.CompactTextString(m) }
-func (*S2RZoneStatusGetRespProto) ProtoMessage()               {}
-func (*S2RZoneStatusGetRespProto) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+func (m *ZoneStatusGetRespProto) Reset()                    { *m = ZoneStatusGetRespProto{} }
+func (m *ZoneStatusGetRespProto) String() string            { return proto.CompactTextString(m) }
+func (*ZoneStatusGetRespProto) ProtoMessage()               {}
+func (*ZoneStatusGetRespProto) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
-func (m *S2RZoneStatusGetRespProto) GetZoneID() uint32 {
+func (m *ZoneStatusGetRespProto) GetZoneID() uint32 {
 	if m != nil {
 		return m.ZoneID
 	}
 	return 0
 }
 
-func (m *S2RZoneStatusGetRespProto) GetZoneStatus() int32 {
+func (m *ZoneStatusGetRespProto) GetZoneStatus() int32 {
 	if m != nil {
 		return m.ZoneStatus
 	}
@@ -74,8 +74,8 @@ func (m *S2RZoneStatusGetRespProto) GetZoneStatus() int32 {
 }
 
 func init() {
-	proto.RegisterType((*S2RZoneStatusGetReqProto)(nil), "proto.resource.S2RZoneStatusGetReqProto")
-	proto.RegisterType((*S2RZoneStatusGetRespProto)(nil), "proto.resource.S2RZoneStatusGetRespProto")
+	proto.RegisterType((*ZoneStatusGetReqProto)(nil), "proto.resource.ZoneStatusGetReqProto")
+	proto.RegisterType((*ZoneStatusGetRespProto)(nil), "proto.resource.ZoneStatusGetRespProto")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -89,7 +89,7 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for GameIntrService service
 
 type GameIntrServiceClient interface {
-	S2RZoneStatusGet(ctx context.Context, in *S2RZoneStatusGetReqProto, opts ...grpc.CallOption) (*S2RZoneStatusGetRespProto, error)
+	ZoneStatusGet(ctx context.Context, in *ZoneStatusGetReqProto, opts ...grpc.CallOption) (*ZoneStatusGetRespProto, error)
 }
 
 type gameIntrServiceClient struct {
@@ -100,9 +100,9 @@ func NewGameIntrServiceClient(cc *grpc.ClientConn) GameIntrServiceClient {
 	return &gameIntrServiceClient{cc}
 }
 
-func (c *gameIntrServiceClient) S2RZoneStatusGet(ctx context.Context, in *S2RZoneStatusGetReqProto, opts ...grpc.CallOption) (*S2RZoneStatusGetRespProto, error) {
-	out := new(S2RZoneStatusGetRespProto)
-	err := grpc.Invoke(ctx, "/proto.resource.GameIntrService/S2RZoneStatusGet", in, out, c.cc, opts...)
+func (c *gameIntrServiceClient) ZoneStatusGet(ctx context.Context, in *ZoneStatusGetReqProto, opts ...grpc.CallOption) (*ZoneStatusGetRespProto, error) {
+	out := new(ZoneStatusGetRespProto)
+	err := grpc.Invoke(ctx, "/proto.resource.GameIntrService/ZoneStatusGet", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,27 +112,27 @@ func (c *gameIntrServiceClient) S2RZoneStatusGet(ctx context.Context, in *S2RZon
 // Server API for GameIntrService service
 
 type GameIntrServiceServer interface {
-	S2RZoneStatusGet(context.Context, *S2RZoneStatusGetReqProto) (*S2RZoneStatusGetRespProto, error)
+	ZoneStatusGet(context.Context, *ZoneStatusGetReqProto) (*ZoneStatusGetRespProto, error)
 }
 
 func RegisterGameIntrServiceServer(s *grpc.Server, srv GameIntrServiceServer) {
 	s.RegisterService(&_GameIntrService_serviceDesc, srv)
 }
 
-func _GameIntrService_S2RZoneStatusGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(S2RZoneStatusGetReqProto)
+func _GameIntrService_ZoneStatusGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ZoneStatusGetReqProto)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GameIntrServiceServer).S2RZoneStatusGet(ctx, in)
+		return srv.(GameIntrServiceServer).ZoneStatusGet(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.resource.GameIntrService/S2RZoneStatusGet",
+		FullMethod: "/proto.resource.GameIntrService/ZoneStatusGet",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameIntrServiceServer).S2RZoneStatusGet(ctx, req.(*S2RZoneStatusGetReqProto))
+		return srv.(GameIntrServiceServer).ZoneStatusGet(ctx, req.(*ZoneStatusGetReqProto))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -142,8 +142,8 @@ var _GameIntrService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*GameIntrServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "S2RZoneStatusGet",
-			Handler:    _GameIntrService_S2RZoneStatusGet_Handler,
+			MethodName: "ZoneStatusGet",
+			Handler:    _GameIntrService_ZoneStatusGet_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -153,17 +153,17 @@ var _GameIntrService_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("game_intr_rpc.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 181 bytes of a gzipped FileDescriptorProto
+	// 178 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4e, 0x4f, 0xcc, 0x4d,
 	0x8d, 0xcf, 0xcc, 0x2b, 0x29, 0x8a, 0x2f, 0x2a, 0x48, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17,
-	0xe2, 0x03, 0x53, 0x7a, 0x45, 0xa9, 0xc5, 0xf9, 0xa5, 0x45, 0xc9, 0xa9, 0x4a, 0x46, 0x5c, 0x12,
-	0xc1, 0x46, 0x41, 0x51, 0xf9, 0x79, 0xa9, 0xc1, 0x25, 0x89, 0x25, 0xa5, 0xc5, 0xee, 0xa9, 0x25,
-	0x41, 0xa9, 0x85, 0x01, 0x60, 0xb5, 0x62, 0x5c, 0x6c, 0x55, 0xf9, 0x79, 0xa9, 0x9e, 0x2e, 0x12,
-	0x8c, 0x0a, 0x8c, 0x1a, 0xbc, 0x41, 0x50, 0x9e, 0x52, 0x30, 0x97, 0x24, 0xa6, 0x9e, 0xe2, 0x02,
-	0xbc, 0x9a, 0x84, 0xe4, 0xb8, 0xb8, 0xaa, 0xe0, 0x3a, 0x24, 0x98, 0x14, 0x18, 0x35, 0x58, 0x83,
-	0x90, 0x44, 0x8c, 0xaa, 0xb8, 0xf8, 0xdd, 0x13, 0x73, 0x53, 0x3d, 0xf3, 0x4a, 0x8a, 0x82, 0x53,
-	0x8b, 0xca, 0x32, 0x93, 0x53, 0x85, 0xd2, 0xb9, 0x04, 0xd0, 0xed, 0x11, 0xd2, 0xd0, 0x43, 0xf5,
-	0x80, 0x1e, 0x2e, 0xd7, 0x4b, 0x69, 0x12, 0x56, 0x09, 0x75, 0xb3, 0x13, 0x7f, 0x14, 0x2f, 0x4c,
-	0x15, 0x58, 0x4f, 0x12, 0x1b, 0x98, 0x32, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x86, 0xa1, 0x29,
-	0x29, 0x43, 0x01, 0x00, 0x00,
+	0xe2, 0x03, 0x53, 0x7a, 0x45, 0xa9, 0xc5, 0xf9, 0xa5, 0x45, 0xc9, 0xa9, 0x4a, 0xfa, 0x5c, 0xa2,
+	0x51, 0xf9, 0x79, 0xa9, 0xc1, 0x25, 0x89, 0x25, 0xa5, 0xc5, 0xee, 0xa9, 0x25, 0x41, 0xa9, 0x85,
+	0x01, 0x60, 0x85, 0x62, 0x5c, 0x6c, 0x55, 0xf9, 0x79, 0xa9, 0x9e, 0x2e, 0x12, 0x8c, 0x0a, 0x8c,
+	0x1a, 0xbc, 0x41, 0x50, 0x9e, 0x52, 0x00, 0x97, 0x18, 0x9a, 0x86, 0xe2, 0x02, 0xbc, 0x3a, 0x84,
+	0xe4, 0xb8, 0xb8, 0xaa, 0xe0, 0x3a, 0x24, 0x98, 0x14, 0x18, 0x35, 0x58, 0x83, 0x90, 0x44, 0x8c,
+	0x0a, 0xb9, 0xf8, 0xdd, 0x13, 0x73, 0x53, 0x3d, 0xf3, 0x4a, 0x8a, 0x82, 0x53, 0x8b, 0xca, 0x32,
+	0x93, 0x53, 0x85, 0xe2, 0xb8, 0x78, 0x51, 0x2c, 0x11, 0x52, 0xd5, 0x43, 0x75, 0xb7, 0x1e, 0x56,
+	0x47, 0x4b, 0xa9, 0x11, 0x50, 0x06, 0x75, 0xaa, 0x13, 0x7f, 0x14, 0x2f, 0x4c, 0x09, 0x58, 0x43,
+	0x12, 0x1b, 0x98, 0x32, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x23, 0x4f, 0xd0, 0x52, 0x34, 0x01,
+	0x00, 0x00,
 }

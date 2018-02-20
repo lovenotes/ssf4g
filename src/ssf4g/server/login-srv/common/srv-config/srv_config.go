@@ -12,8 +12,8 @@ const (
 
 	RUN_MODE = "dev"
 
-	SERVICE     = "0.0.0.0:8001"
-	SERVICE_RPC = "0.0.0.0:8021"
+	SERVICE      = "0.0.0.0:8001"
+	SERVICE_GAME = "0.0.0.0:8021"
 
 	LOG_PATH   = "/data/ssf4g/logs/loginsrv.log"
 	SENTRY_DSN = ""
@@ -40,8 +40,8 @@ type SrvConfig struct {
 	SrvName string
 	RunMode string
 
-	Service    string
-	ServiceRPC string
+	Service     string
+	ServiceGame string
 
 	LogPath   string
 	SentryDsn string
@@ -103,10 +103,10 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %s).", "service", _conf_info.Service)
 	}
 
-	if _conf_info.ServiceRPC = iniData.String("service_rpc"); _conf_info.ServiceRPC == "" {
-		_conf_info.ServiceRPC = SERVICE_RPC
+	if _conf_info.ServiceGame = iniData.String("service_game"); _conf_info.ServiceGame == "" {
+		_conf_info.ServiceGame = SERVICE_GAME
 
-		tlog.Warn("reload srv config (%s) warn (default %s).", "service_rpc", _conf_info.ServiceRPC)
+		tlog.Warn("reload srv config (%s) warn (default %s).", "service_game", _conf_info.ServiceGame)
 	}
 
 	if _conf_info.LogPath = iniData.String("log_path"); _conf_info.LogPath == "" {

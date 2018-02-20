@@ -3,15 +3,15 @@ syntax = "proto3";
 package proto.resource;
 option go_package="resourceproto";
 
-message S2RZoneStatusGetReqProto {
+message ZoneStatusGetReqProto {
 	uint32 zoneID = 1;
 }
 
-message S2RZoneStatusGetRespProto {
+message ZoneStatusGetRespProto {
 	uint32 zoneID = 1;
 	int32 zoneStatus = 2;
 }
 
 service GameIntrService {
-  	rpc S2RZoneStatusGet(S2RZoneStatusGetReqProto) returns (S2RZoneStatusGetRespProto);
+  	rpc ZoneStatusGet(ZoneStatusGetReqProto) returns (ZoneStatusGetRespProto);
 }

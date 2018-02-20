@@ -9,6 +9,6 @@ import (
 type GameIntrService struct {
 }
 
-func (gameintrservice *GameIntrService) S2RZoneStatusGet(ctx context.Context, reqproto *resourceproto.S2RZoneStatusGetReqProto) (*resourceproto.S2RZoneStatusGetRespProto, error) {
+func (gameintrservice *GameIntrService) ZoneStatusGet(ctx context.Context, reqproto *resourceproto.ZoneStatusGetReqProto) (*resourceproto.ZoneStatusGetRespProto, error) {
 	return nil, nil
 }

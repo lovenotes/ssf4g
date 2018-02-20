@@ -18,7 +18,7 @@ func init() {
 
 	_game_dao = &gamedao.GameDao{}
 
-	errData := _game_dao.InitLoginDao(gameUrl, maxIdleConn, maxOpenConn)
+	errData := _game_dao.InitGameDao(gameUrl, maxIdleConn, maxOpenConn)
 
 	if errData != nil {
 		errMsg := tlog.Error("init game dao (%s, %d, %d) err (%v).", gameUrl, maxIdleConn, maxOpenConn, errData.Error())

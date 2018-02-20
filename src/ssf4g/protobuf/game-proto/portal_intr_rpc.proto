@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package proto.game;
+option go_package="gameproto";
+
+message PingReqProto {
+}
+
+message PingRespProto {
+}
+
+service PortalIntrService {
+  	rpc Ping(PingReqProto) returns (PingRespProto);
+}

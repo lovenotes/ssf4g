@@ -12,7 +12,7 @@ type GameDao struct {
 }
 
 // Func - 初始化GameDao
-func (dao *LoginDao) InitGameDao(databaseurl string, maxidleconn, maxopenconn int) *tlog.ErrData {
+func (dao *GameDao) InitGameDao(databaseurl string, maxidleconn, maxopenconn int) *tlog.ErrData {
 	var err error
 
 	dao._db, err = gorm.Open("mysql", databaseurl)
