@@ -10,7 +10,10 @@ import (
 const (
 	SRV_NAME = "login_srv"
 
-	SRV_ID = 1
+	ZONE_ID = 1
+
+	SRV_ID  = 1
+	SRV_VER = "0.0.1"
 
 	RUN_MODE = "dev"
 
@@ -34,7 +37,9 @@ const (
 
 type SrvConfig struct {
 	SrvName string
+	ZoneID  int32
 	SrvID   int32
+	SrvVer  string
 	RunMode string
 
 	Service       string
@@ -88,6 +93,16 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %s).", "srv_name", _conf_info.SrvName)
 	}
 
+	zoneID, err := iniData.Int("zone_id")
+
+	if err != nil {
+		_conf_info.ZoneID = ZONE_ID
+
+		tlog.Warn("reload srv config (%s) warn (default %d).", "zone_id", _conf_info.ZoneID)
+	} else {
+		_conf_info.ZoneID = int32(zoneID)
+	}
+
 	srvID, err := iniData.Int("srv_id")
 
 	if err != nil {
@@ -96,6 +111,12 @@ func ReloadSrvConfig() {
 		tlog.Warn("reload srv config (%s) warn (default %d).", "srv_id", _conf_info.SrvID)
 	} else {
 		_conf_info.SrvID = int32(srvID)
+	}
+
+	if _conf_info.SrvVer = iniData.String("srv_ver"); _conf_info.SrvVer == "" {
+		_conf_info.SrvVer = SRV_VER
+
+		tlog.Warn("reload srv config (%s) warn (default %s).", "srv_ver", _conf_info.SrvVer)
 	}
 
 	if _conf_info.RunMode = iniData.String("run_mode"); _conf_info.RunMode == "" {
